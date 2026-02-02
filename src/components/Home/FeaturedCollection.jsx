@@ -1,0 +1,200 @@
+import React from "react";
+import { ArrowRight, Sparkles, TrendingUp, Star } from "lucide-react";
+
+const FeaturedCollection = () => {
+    // Collections data with Bento grid sizes
+    const collections = [
+        {
+            id: 1,
+            title: "Summer Collection",
+            subtitle: "Hot Trending",
+            itemCount: 124,
+            image:
+                "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800",
+            gradient: "from-orange-400 to-pink-500",
+            size: "large", // Takes 2 columns
+            icon: TrendingUp,
+        },
+        {
+            id: 2,
+            title: "Winter Wear",
+            subtitle: "Cozy Vibes",
+            itemCount: 89,
+            image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500",
+            gradient: "from-blue-400 to-cyan-500",
+            size: "small",
+            icon: Sparkles,
+        },
+        {
+            id: 3,
+            title: "Accessories",
+            subtitle: "Complete Look",
+            itemCount: 156,
+            image:
+                "https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?w=500",
+            gradient: "from-purple-400 to-indigo-500",
+            size: "small",
+            icon: Star,
+        },
+        {
+            id: 4,
+            title: "Sports & Fitness",
+            subtitle: "Active Lifestyle",
+            itemCount: 67,
+            image: "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500",
+            gradient: "from-green-400 to-teal-500",
+            size: "medium",
+            icon: TrendingUp,
+        },
+        {
+            id: 5,
+            title: "Formal Wear",
+            subtitle: "Business Ready",
+            itemCount: 93,
+            image:
+                "https://images.unsplash.com/photo-1507680434567-5739c80be1ac?w=800",
+            gradient: "from-gray-700 to-gray-900",
+            size: "medium",
+            icon: Star,
+        },
+        {
+            id: 6,
+            title: "Trending Now",
+            subtitle: "Must Have",
+            itemCount: 201,
+            image:
+                "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800",
+            gradient: "from-red-400 to-rose-500",
+            size: "large", // Takes 2 columns
+            icon: Sparkles,
+        },
+    ];
+
+    // Bento grid size classes
+    const sizeClasses = {
+        small: "col-span-1 row-span-1 h-64 sm:h-72",
+        medium: "col-span-1 sm:col-span-1 row-span-1 h-64 sm:h-80",
+        large: "col-span-1 sm:col-span-2 row-span-1 h-64 sm:h-72 lg:h-80",
+    };
+
+    return (
+        <section className=" pb-5 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 via-white to-gray-100">
+            <div className="max-w-7xl mx-auto">
+                {/* Section Header */}
+                <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-4">
+                        <Sparkles className="w-4 h-4 text-purple-600" />
+                        <span className="text-sm font-semibold text-purple-900">
+                            Curated Just For You
+                        </span>
+                    </div>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
+                        Featured Collections
+                    </h2>
+                    <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+                        Explore our handpicked collections designed to elevate your style
+                    </p>
+                </div>
+
+                {/* Bento Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 auto-rows-auto">
+                    {collections.map((collection, index) => {
+                        const Icon = collection.icon;
+                        return (
+                            <div
+                                key={collection.id}
+                                className={`group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${sizeClasses[collection.size]}`}
+                                style={{
+                                    animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
+                                }}
+                            >
+                                {/* Background Image */}
+                                <div className="absolute inset-0">
+                                    <img
+                                        src={collection.image}
+                                        alt={collection.title}
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+
+                                    {/* Gradient Overlay */}
+                                    <div
+                                        className={`absolute inset-0 bg-gradient-to-br ${collection.gradient} opacity-70 group-hover:opacity-80 transition-opacity duration-500`}
+                                    ></div>
+
+                                    {/* Noise Texture Effect */}
+                                    <div className="absolute inset-0 bg-black/10 mix-blend-overlay"></div>
+                                </div>
+
+                                {/* Content Container */}
+                                <div className="relative h-full flex flex-col justify-between p-6 sm:p-8 text-white">
+                                    {/* Top Section */}
+                                    <div className="flex items-start justify-between">
+                                        <div className="bg-white/20 backdrop-blur-md rounded-full p-3 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+                                            <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                                        </div>
+
+                                        <div className="bg-white/90 text-gray-900 px-3 py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg">
+                                            {collection.itemCount}+
+                                        </div>
+                                    </div>
+
+                                    {/* Bottom Section */}
+                                    <div className="space-y-3">
+                                        <div>
+                                            <p className="text-xs sm:text-sm font-medium opacity-90 mb-1">
+                                                {collection.subtitle}
+                                            </p>
+                                            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold drop-shadow-lg leading-tight">
+                                                {collection.title}
+                                            </h3>
+                                        </div>
+
+                                        {/* CTA Button */}
+                                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                                            <button className="bg-white text-gray-900 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 hover:bg-gray-100 transition-colors shadow-lg">
+                                                Explore
+                                                <ArrowRight className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Shine Effect on Hover */}
+                                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                                </div>
+
+                                {/* Border Glow Effect */}
+                                <div className="absolute inset-0 rounded-3xl border-2 border-white/0 group-hover:border-white/30 transition-all duration-500"></div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* Bottom CTA */}
+                <div className="mt-12 sm:mt-16 text-center">
+                    <button className="group inline-flex items-center gap-3 border-black border px-8 sm:px-12 py-4  font-bold text-base sm:text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                        <span>Discover All Collections</span>
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
+                    </button>
+                </div>
+            </div>
+
+            {/* CSS Animation */}
+            <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+        </section>
+    );
+};
+
+export default FeaturedCollection;

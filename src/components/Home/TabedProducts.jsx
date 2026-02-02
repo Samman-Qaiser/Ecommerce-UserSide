@@ -1,0 +1,357 @@
+import React, { useState } from 'react';
+import { ChevronRight, Sparkles } from 'lucide-react';
+import ProductCard from '../product/ProductCard';
+
+
+const TabbedProducts = () => {
+  const [activeTab, setActiveTab] = useState('festive-lehenga');
+
+  // Tabs configuration
+  const tabs = [
+    {
+      id: 'festive-lehenga',
+      label: 'Festive Lehenga',
+      icon: '👗',
+      description: 'Elegant & Traditional'
+    },
+    {
+      id: 'festive-saree',
+      label: 'Festive Saree',
+      icon: '🪷',
+      description: 'Grace & Beauty'
+    },
+    {
+      id: 'ready-to-wear',
+      label: 'Ready to Wear',
+      icon: '✨',
+      description: 'Comfort & Style'
+    }
+  ];
+
+  // Dummy products data for each tab (Firebase se replace hoga)
+  const productsData = {
+    'festive-lehenga': [
+      {
+        id: 1,
+        name: 'Royal Silk Lehenga',
+        description: 'Heavy Embroidered',
+        category: 'Bridal Collection',
+        price: 15999,
+        originalPrice: 24999,
+        rating: 4.8,
+        reviews: 234,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500',
+        images: [
+          'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500',
+          'https://images.unsplash.com/photo-1583391733956-6c78276477e5?w=500',
+        ],
+        badge: 'BEST SELLER',
+        stock: 5,
+        inStock: true,
+      },
+      {
+        id: 2,
+        name: 'Designer Lehenga Set',
+        description: 'Mirror Work',
+        category: 'Wedding Special',
+        price: 12499,
+        originalPrice: 18999,
+        rating: 4.9,
+        reviews: 456,
+        image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e5?w=500',
+        badge: 'TOP RATED',
+        stock: 3,
+        inStock: true,
+      },
+      {
+        id: 3,
+        name: 'Embellished Lehenga',
+        description: 'Stone Work',
+        category: 'Festive Wear',
+        price: 9999,
+        originalPrice: 14999,
+        rating: 4.7,
+        reviews: 189,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500',
+        badge: 'NEW',
+        stock: 8,
+        inStock: true,
+      },
+      {
+        id: 4,
+        name: 'Traditional Lehenga',
+        description: 'Zari Work',
+        category: 'Classic Collection',
+        price: 11999,
+        originalPrice: 16999,
+        rating: 4.6,
+        reviews: 167,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500',
+        badge: 'SALE',
+        stock: 6,
+        inStock: true,
+      },
+    ],
+    'festive-saree': [
+      {
+        id: 5,
+        name: 'Silk Saree Premium',
+        description: 'Pure Banarasi',
+        category: 'Silk Collection',
+        price: 7999,
+        originalPrice: 12999,
+        rating: 4.9,
+        reviews: 567,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500',
+        badge: 'TOP RATED',
+        stock: 4,
+        inStock: true,
+      },
+      {
+        id: 6,
+        name: 'Designer Saree',
+        description: 'Printed Georgette',
+        category: 'Modern Fusion',
+        price: 3999,
+        originalPrice: 6999,
+        rating: 4.7,
+        reviews: 234,
+        image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e5?w=500',
+        badge: 'BEST SELLER',
+        stock: 12,
+        inStock: true,
+      },
+      {
+        id: 7,
+        name: 'Embroidered Saree',
+        description: 'Heavy Border',
+        category: 'Wedding Collection',
+        price: 5999,
+        originalPrice: 8999,
+        rating: 4.8,
+        reviews: 345,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500',
+        badge: 'NEW',
+        stock: 7,
+        inStock: true,
+      },
+      {
+        id: 8,
+        name: 'Cotton Silk Saree',
+        description: 'Lightweight',
+        category: 'Casual Wear',
+        price: 2999,
+        originalPrice: 4999,
+        rating: 4.5,
+        reviews: 123,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500',
+        badge: 'SALE',
+        stock: 15,
+        inStock: true,
+      },
+    ],
+    'ready-to-wear': [
+      {
+        id: 9,
+        name: 'Pre-Stitched Saree',
+        description: 'Ready in Minutes',
+        category: 'Quick Wear',
+        price: 4999,
+        originalPrice: 7999,
+        rating: 4.8,
+        reviews: 456,
+        image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e5?w=500',
+        badge: 'BEST SELLER',
+        stock: 10,
+        inStock: true,
+      },
+      {
+        id: 10,
+        name: 'Dhoti Style Saree',
+        description: 'Modern Drape',
+        category: 'Contemporary',
+        price: 3499,
+        originalPrice: 5999,
+        rating: 4.6,
+        reviews: 234,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500',
+        badge: 'NEW',
+        stock: 8,
+        inStock: true,
+      },
+      {
+        id: 11,
+        name: 'Gown Style Lehenga',
+        description: 'Ready to Wear',
+        category: 'Fusion Wear',
+        price: 6999,
+        originalPrice: 9999,
+        rating: 4.9,
+        reviews: 678,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500',
+        badge: 'TOP RATED',
+        stock: 5,
+        inStock: true,
+      },
+      {
+        id: 12,
+        name: 'Indo-Western Set',
+        description: 'Complete Look',
+        category: 'Party Wear',
+        price: 5499,
+        originalPrice: 8999,
+        rating: 4.7,
+        reviews: 345,
+        image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e5?w=500',
+        badge: 'SALE',
+        stock: 6,
+        inStock: true,
+      },
+    ],
+  };
+
+  // Get current tab's products
+  const currentProducts = productsData[activeTab] || [];
+
+  return (
+    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-4">
+            <Sparkles className="w-4 h-4 text-purple-600" />
+            <span className="text-sm font-semibold text-purple-900">Curated Collections</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
+            Shop by Category
+          </h2>
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+            Explore our exclusive range of festive and ready-to-wear collections
+          </p>
+        </div>
+
+        {/* Tabs Navigation */}
+        <div className="mb-8 sm:mb-12">
+          {/* Desktop Tabs */}
+          <div className="hidden sm:flex items-center justify-center gap-4 lg:gap-6">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  group relative px-6 lg:px-8 py-2 border border-gray-500 border-dotted font-semibold text-base lg:text-lg
+                  transition-all duration-300 transform hover:scale-105
+                  ${activeTab === tab.id
+                    ? ' bg-[#F5E6D3] border border-dotted border-black'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                  }
+                `}
+              >
+                <div className="flex items-center gap-3">
+                 
+                  <div className="text-left">
+                    <div className="font-bold">{tab.label}</div>
+                  
+                  </div>
+                </div>
+
+          
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile Tabs - Horizontal Scroll */}
+          <div className="sm:hidden overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+            <div className="flex gap-3 min-w-max">
+              {tabs.map((tab) => (
+                <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  group relative px-6 lg:px-8 py-2 border border-gray-500 border-dotted font-semibold text-base lg:text-lg
+                  transition-all duration-300 transform hover:scale-105
+                  ${activeTab === tab.id
+                    ? ' bg-[#F5E6D3] border border-dotted border-black'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                  }
+                `}
+              >
+                  <div className="flex items-center gap-2">
+                
+                    <span>{tab.label}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Products Grid with Animation */}
+        <div className="relative w-full lg:w-[90%] m-auto ">
+          {/* Content */}
+          <div 
+            key={activeTab}
+            className="grid grid-cols-1 justify-items-center sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 animate-fadeIn"
+          >
+            {currentProducts.map((product, index) => (
+              <div
+                key={product.id}
+                style={{
+                  animation: `slideUp 0.5s ease-out ${index * 0.1}s both`
+                }}
+              >
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* View All Button */}
+        <div className="text-center mt-10 sm:mt-12">
+          <button className="group inline-flex items-center gap-3 border-black border px-8 sm:px-12 py-4  font-bold text-base sm:text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+            <span>View All Products</span>
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+          </button>
+        </div>
+      </div>
+
+      {/* CSS Animations */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.4s ease-out;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+    </section>
+  );
+};
+
+export default TabbedProducts;
