@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
-import { menuData } from '@/data/menuData';
+import { menuData } from '../../data/menudata';
 import { cn } from '@/lib/utils';
 import {
   Dialog,
