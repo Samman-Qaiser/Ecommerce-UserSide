@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-body {
-  font-family: "Jost", sans-serif;
-}
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -62,7 +60,7 @@ body {
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
    --accent: oklch(0.97 0 0);
-   --accentt:#FF8A00;
+   --accentt:#732D92;
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
@@ -125,3 +123,13 @@ body {
     @apply bg-background text-foreground;
   }
 }
+      @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }

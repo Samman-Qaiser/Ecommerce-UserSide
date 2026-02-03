@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronRight, Sparkles } from 'lucide-react';
 import ProductCard from '../product/ProductCard';
+import AnimatedButton from '../ui/AnimmatedButton';
 
 
 const TabbedProducts = () => {
@@ -214,11 +215,11 @@ const TabbedProducts = () => {
   const currentProducts = productsData[activeTab] || [];
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30">
+    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-white via-purple-50/30 to-pink-50/30">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-12">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 bg-linear-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-4">
             <Sparkles className="w-4 h-4 text-purple-600" />
             <span className="text-sm font-semibold text-purple-900">Curated Collections</span>
           </div>
@@ -307,12 +308,7 @@ const TabbedProducts = () => {
         </div>
 
         {/* View All Button */}
-        <div className="text-center mt-10 sm:mt-12">
-          <button className="group inline-flex items-center gap-3 border-black border px-8 sm:px-12 py-4  font-bold text-base sm:text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-            <span>View All Products</span>
-            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-          </button>
-        </div>
+     <AnimatedButton label='View All Products' align='center'/>
       </div>
 
       {/* CSS Animations */}

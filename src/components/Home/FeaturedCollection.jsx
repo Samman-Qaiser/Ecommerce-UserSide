@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowRight, Sparkles, TrendingUp, Star } from "lucide-react";
+import AnimatedButton from "../ui/AnimmatedButton";
 
 const FeaturedCollection = () => {
     // Collections data with Bento grid sizes
@@ -78,11 +79,11 @@ const FeaturedCollection = () => {
     };
 
     return (
-        <section className=" pb-5 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 via-white to-gray-100">
-            <div className="max-w-7xl mx-auto">
+        <section className=" pb-5  px-4 sm:px-6 lg:px-8 bg-linear-to-br from-gray-50 via-white to-gray-100">
+            <div className="max-w-7xl  mx-auto">
                 {/* Section Header */}
                 <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-4">
+                    <div className="inline-flex items-center gap-2 bg-linear-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-4">
                         <Sparkles className="w-4 h-4 text-purple-600" />
                         <span className="text-sm font-semibold text-purple-900">
                             Curated Just For You
@@ -116,9 +117,9 @@ const FeaturedCollection = () => {
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
 
-                                    {/* Gradient Overlay */}
+                                    {/* linear Overlay */}
                                     <div
-                                        className={`absolute inset-0 bg-gradient-to-br ${collection.gradient} opacity-70 group-hover:opacity-80 transition-opacity duration-500`}
+                                        className={`absolute inset-0 bg-linear-to-br ${collection.gradient} opacity-70 group-hover:opacity-80 transition-opacity duration-500`}
                                     ></div>
 
                                     {/* Noise Texture Effect */}
@@ -161,7 +162,7 @@ const FeaturedCollection = () => {
 
                                 {/* Shine Effect on Hover */}
                                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                                 </div>
 
                                 {/* Border Glow Effect */}
@@ -172,27 +173,9 @@ const FeaturedCollection = () => {
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="mt-12 sm:mt-16 text-center">
-                    <button className="group inline-flex items-center gap-3 border-black border px-8 sm:px-12 py-4  font-bold text-base sm:text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                        <span>Discover All Collections</span>
-                        <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
-                    </button>
-                </div>
+        
             </div>
-
-            {/* CSS Animation */}
-            <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
+  <AnimatedButton label="Discover All Collections" align="center"/>
         </section>
     );
 };

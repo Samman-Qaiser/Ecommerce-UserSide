@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Heart, ShoppingBag, Star, Truck, Shield, RefreshCw, ChevronDown } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { ChevronLeft, ChevronRight, Heart, ShoppingBag, Star, Truck, Shield, RefreshCw, ChevronDown, ShoppingBagIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -11,13 +11,17 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
+import { useDispatch } from 'react-redux';
+import { addToCart } from "../redux/cartSlice";
+import { toast } from "sonner";
+import AnimatedButton from '../components/ui/AnimmatedButton';
 
 export default function ProductPage() {
   const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [quantity, setQuantity] = useState(1);
-
+  const dispatch=useDispatch()
   // Dummy product data (Firebase se replace hoga)
   const product = {
     id: id || 1,
@@ -52,7 +56,7 @@ export default function ProductPage() {
       'Perfect for festive occasions',
     ],
   };
-
+  const navigate=useNavigate()
   const nextImage = () => {
     setCurrentImageIndex((prev) => 
       prev === product.images.length - 1 ? 0 : prev + 1
@@ -64,7 +68,23 @@ export default function ProductPage() {
       prev === 0 ? product.images.length - 1 : prev - 1
     );
   };
+const handleAddToCart = () => {
+  dispatch(addToCart({
+    ...product,
+    quantity: 1
+  }));
+  toast.success(`${product.name} added to cart!`);
+};
 
+
+const handleBuyNow = () => {
+  dispatch(addToCart({
+    ...product,
+    quantity: 1
+  }));
+  // Success message dikhane ki zarurat nahi kyunki redirect ho raha hai
+  navigate('/checkout'); 
+};
   return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8 lg:py-12">
@@ -227,29 +247,9 @@ export default function ProductPage() {
             <Separator className="my-6" />
 
             {/* Action Buttons */}
-            <div className="space-y-3 mb-8">
-              <Button 
-                className="w-full h-14 text-base font-semibold bg-yellow-500 hover:bg-yellow-600 text-black shadow-md"
-                size="lg"
-              >
-                <ShoppingBag className="mr-2 h-5 w-5" />
-                ADD TO CART
-              </Button>
-
-              <Button
-                variant="outline"
-                className="w-full h-14 text-base font-semibold border-2"
-                size="lg"
-                onClick={() => setIsFavorite(!isFavorite)}
-              >
-                <Heart 
-                  className={cn(
-                    "mr-2 h-5 w-5",
-                    isFavorite && "fill-red-500 stroke-red-500"
-                  )} 
-                />
-                {isFavorite ? 'SAVED TO WISHLIST' : 'ADD TO WISHLIST'}
-              </Button>
+            <div className="flex  flex-col lg:flex-row gap-2  mb-8">
+         <AnimatedButton onClick={handleAddToCart}  label='ADD TO CART ' icon={ShoppingBagIcon}  className='font-light w-full'/>
+         <AnimatedButton onClick={handleBuyNow} label='BUY NOW' className='font-light bg-purple-600 w-full'/>
             </div>
 
             {/* Features */}

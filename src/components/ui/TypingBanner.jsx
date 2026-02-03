@@ -35,7 +35,7 @@ const TypingBanner = () => {
   }, [charIndex, messageIndex]);
 
   return (
-    <div className="hidden lg:flex bg-[#FF8A00] items-center justify-center text-white p-2 ">
+    <div className="hidden lg:flex bg-[#732D92] items-center justify-center text-white p-2 ">
       {text}
       <span className="animate-pulse">|</span>
     </div>

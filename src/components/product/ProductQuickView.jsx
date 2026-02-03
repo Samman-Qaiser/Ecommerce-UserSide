@@ -1,17 +1,24 @@
-import { useState } from "react";
-import { X, ShoppingBag, ChevronRight, ChevronLeft } from "lucide-react";
+import { useState, useEffect } from "react";
+import { X, ChevronRight, ChevronLeft, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../redux/cartSlice";
+import { toggleWishlist } from "../../redux/wishlistSlice";
+import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import AnimatedButton from "../ui/AnimmatedButton";
 
 export default function ProductQuickView({ product, open, onClose }) {
+  const dispatch = useDispatch();
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Fallback for images array
+  const images = product.images || [product.image];
+
   const sizes = [
     { label: "XS-S", inStock: true },
     { label: "SM", inStock: true },
@@ -20,263 +27,166 @@ export default function ProductQuickView({ product, open, onClose }) {
     { label: "XXXL", inStock: true },
   ];
 
-  const [selectedSize, setSelectedSize] = useState(null);
+  // Redux Logic
+  const wishlistItems = useSelector((state) => state.wishlist.items);
+  const isFavorite = wishlistItems.some((item) => item.id === product.id);
 
-  const handleSelect = (size) => {
-    if (!size.inStock) return; // prevent selecting out-of-stock
-    setSelectedSize(size.label);
-  };
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // Modal safety: Disable body scroll when open
+  useEffect(() => {
+    if (open) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "unset";
+    return () => (document.body.style.overflow = "unset");
+  }, [open]);
 
   if (!open || !product) return null;
 
-  const nextImage = () =>
-    setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
-  const prevImage = () =>
-    setCurrentImageIndex(
-      (prev) => (prev - 1 + product.images.length) % product.images.length,
-    );
+  const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      toast.error("Please select a size", { position: "bottom-center" });
+      return;
+    }
+    dispatch(addToCart({ ...product, selectedSize }));
+    toast.success("Added to cart successfully!");
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center lg:p-4">
-      {/* Backdrop - Only visible on LG screens */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm lg:block hidden"
-        onClick={onClose}
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-0 lg:p-6">
+      {/* Overlay */}
+      <motion.div 
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        className="absolute inset-0 bg-black/60 backdrop-blur-md" 
+        onClick={onClose} 
       />
 
-      {/* --- DESKTOP VIEW (lg screen) --- */}
-      <div className="relative z-50 w-[80vw] max-w-4xl bg-[#FCF8F3] overflow-hidden shadow-2xl rounded-sm">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-60 text-gray-500 hover:text-black transition-colors"
-        >
-          <X className="h-6 w-6 stroke-[1.5px]" />
+      <motion.div 
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="relative z-110 w-full h-full lg:h-auto lg:max-w-5xl bg-white lg:rounded-lg overflow-hidden flex flex-col lg:flex-row"
+      >
+        {/* Desktop Close Button */}
+        <button onClick={onClose} className="absolute top-4 right-4 z-50 p-2 bg-white/50 hover:bg-white rounded-full hidden lg:block transition-all">
+          <X className="w-5 h-5" />
         </button>
 
-        <div className="flex lg:flex-row flex-col">
-          {/* LEFT: Image Gallery */}
-          <div className="relative  w-[50%] flex items-center justify-center  min-h-125">
-            <div className="relative py-6 flex items-center justify-center">
-              <img
-                src={product.images[currentImageIndex]}
-                alt={product.name}
-                className="max-h-[85vh] w-full object-contain shadow-sm"
-              />
-            </div>
-
-            {/* Carousel Dots (Bottom Left Style) */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-              {product.images.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentImageIndex(idx)}
-                  className={cn(
-                    "h-2 w-2 rounded-full border border-gray-400 transition-all",
-                    idx === currentImageIndex
-                      ? "bg-gray-800 w-4"
-                      : "bg-transparent",
-                  )}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* RIGHT: Product Info */}
-          <div className="flex w-[53%] flex-col px-2 justify-center">
-            {/* Product Tags */}
-            <div className="flex gap-2 ">
-              <Badge
-                variant="outline"
-                className="rounded-none mb-1 border-gray-400 font-light tracking-widest"
-              >
-                jhioo
-              </Badge>
-            </div>
-
-            {/* Title */}
-            <h1 className="text-2xl md:text-3xl font-medium  text-gray-900  tracking-widest uppercase">
-              {product.name}
-            </h1>
-
-            {/* Price */}
-            <div >
-              <span className="text-xl font-medium text-gray-800">
-                ₹ {product.price.toLocaleString("en-IN")}.00
-              </span>
-              <p className="text-[11px] text-gray-500 mt-1">
-                MRP Inclusive of all taxes
-              </p>
-            </div>
-
-            {/* Social Proof */}
-            <div className="flex items-center gap-2 mb-1">
-              <span className="animate-pulse text-orange-700 text-lg">🔥</span>
-              <p className="text-[11px] text-red-800 font-medium mt-2 ">
-                39 others have this in their cart!
-              </p>
-      </div>
-
-            {/* Action Buttons */}
-            <div className="space-y-6 pt-1  border-t w-full border border-l-0 border-r-0">
-              {/* --- SIZE SECTION START --- */}
-              <div>
-                <div className="flex items-center justify-between mt-2 mb-2">
-                  <span className="text-sm font-medium tracking-widest text-gray-900">
-                    SIZE:
-                  </span>
-                  <button className="text-sm mb-1 font-medium underline underline-offset-4 hover:text-gray-600 transition-colors">
-                    Size chart
-                  </button>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  {sizes.map((size) => {
-                    const isSelected = selectedSize === size.label;
-
-                    return size.inStock ? (
-                      <button
-                        key={size.label}
-                        onClick={() => handleSelect(size)}
-                        className={`
-                h-10 w-12 flex items-center justify-center text-md tracking-tighter font-light
-                border transition-all
-                ${
-                  isSelected
-                    ? "bg-[#FFB52E] border-[#FFB52E] text-white shadow-sm"
-                    : "bg-white border-gray-200 text-gray-900 hover:border-[#FFB52E] hover:text-[#FFB52E]"
-                }
-                active:scale-95
-              `}
-                      >
-                        {size.label}
-                      </button>
-                    ) : (
-                      <div
-                        key={size.label}
-                        className="h-10 w-10 border border-gray-200 flex items-center justify-center text-gray-400 text-md tracking-tighter bg-white/50 cursor-not-allowed"
-                      >
-                        {size.label}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* --- SIZE SECTION END --- */}
-              <Button className="w-full py-6 bg-[#FFB52E] hover:bg-[#E6A429] text-white text-xl tracking-[0.2em] font-               semibold rounded-md shadow-md transition-all active:scale-[0.98]">
-                ADD TO CART
-              </Button>
-            </div>
-
-            <Accordion
-              type="single"
-              collapsible
-              defaultValue="item-1"
-              className="border-b"
-            >
-              <AccordionItem value="item-1" className="border-b">
-                <AccordionTrigger className="font-light tracking-wider">
-                  Details
-                </AccordionTrigger>
-                <AccordionContent></AccordionContent>
-              </AccordionItem>
-            </Accordion>
-            <Link to={`/product/${product.id}`} className="py-7  ">
-              View Details
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* --- MOBILE VIEW (Same as your Screenshot) --- */}
-      <div className="fixed inset-0 bg-[#FCF8F3] z-50 overflow-y-auto lg:hidden">
-        {/* Yellow Header */}
-        <div className="bg-[#FFB52E] text-white flex items-center justify-between px-4 py-4 sticky top-0 z-20 shadow-sm">
-          <div className="w-6" /> {/* Spacer */}
-          <h2 className="text-sm font-semibold tracking-[0.2em] uppercase">
-            Choose Options
-          </h2>
-          <button onClick={onClose}>
-            <X className="h-6 w-6" />
-          </button>
-        </div>
-
-        <div className="flex flex-col">
-          {/* Mobile Image Carousel */}
-          <div className="relative aspect-3/4 bg-[#F3EFE9] flex items-center justify-center p-4">
-            <img
-              src={product.images[currentImageIndex]}
-              alt={product.name}
-              className="h-full w-full object-contain"
+        {/* LEFT: IMAGE CAROUSEL SECTION */}
+        <div className="relative mt-5 w-full lg:w-1/2 h-[50vh] lg:h-[80vh] bg-[#F9F9F9] group">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={currentImageIndex}
+              src={images[currentImageIndex]}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+              className="w-full h-full object-cover lg:object-contain"
             />
+          </AnimatePresence>
 
-            {/* Arrows */}
-            <button
-              onClick={prevImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/50 p-2 rounded-full"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={nextImage}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/50 p-2 rounded-full"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-          </div>
+          {/* Navigation Arrows */}
+          {images.length > 1 && (
+            <>
+              <button onClick={prevImage} className="absolute left-4 top-1/2  -translate-y-1/2 bg-white/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </>
+          )}
 
-          {/* Product Content */}
-          <div className="p-6">
-            <h1 className="text-xl font-light tracking-widest uppercase text-gray-900 mb-3">
-              {product.name}
-            </h1>
-            <Badge
-              variant="outline"
-              className="rounded-none border-gray-300 font-light text-[10px] mb-4"
-            >
-              {product.category || "SKIRT"}
-            </Badge>
-
-            <div className="mb-6">
-              <div className="text-lg font-medium text-gray-800">
-                ₹ {product.price.toLocaleString("en-IN")}.00
-              </div>
-              <p className="text-[11px] text-gray-400 italic">
-                MRP Inclusive of all taxes
-              </p>
-            </div>
-
-            <hr className="border-gray-200 mb-4" />
-
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="details" className="border-b">
-                <AccordionTrigger className="uppercase text-xs tracking-[0.2em] py-5">
-                  Details
-                </AccordionTrigger>
-                <AccordionContent>Your product info here...</AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="size" className="border-b">
-                <AccordionTrigger className="uppercase text-xs tracking-[0.2em] py-5 flex justify-between">
-                  <span>Size</span>
-                  <span className="text-[10px] underline lowercase normal-case">
-                    Size chart
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent>Select your size...</AccordionContent>
-              </AccordionItem>
-            </Accordion>
-
-            {/* Sticky Mobile Add to Cart (Optional) */}
-            <div className="mt-10">
-              <Button className="w-full py-8 bg-[#FFB52E] text-white text-lg tracking-widest rounded-none">
-                ADD TO CART
-              </Button>
-            </div>
+          {/* Progress Indicators */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {images.map((_, idx) => (
+              <div 
+                key={idx} 
+                className={cn("h-1 transition-all rounded-full", idx === currentImageIndex ? "w-6 bg-black" : "w-2 bg-black/20")} 
+              />
+            ))}
           </div>
         </div>
-      </div>
+
+        {/* RIGHT: CONTENT SECTION */}
+        <div className="w-full lg:w-1/2 p-6 lg:p-12 flex flex-col h-full bg-white overflow-y-auto">
+          {/* Mobile Header (Only visible on Mobile) */}
+          <div className="lg:hidden flex justify-between items-center mb-6">
+            <button onClick={onClose}><X className="w-6 h-6" /></button>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase">Quick View</span>
+            <button onClick={() => dispatch(toggleWishlist(product))}>
+               <Heart className={cn("w-6 h-6", isFavorite ? "fill-red-500 stroke-red-500" : "")} />
+            </button>
+          </div>
+
+          <div className="flex-1">
+            <div className="flex justify-between items-start mb-2">
+              <Badge variant="secondary" className="rounded-none uppercase tracking-tighter text-[10px]">
+                {product.category}
+              </Badge>
+              <button onClick={() => dispatch(toggleWishlist(product))} className="hidden lg:block">
+                <Heart className={cn("w-6 h-6 transition-all hover:scale-110", isFavorite ? "fill-red-500 stroke-red-500" : "text-gray-400")} />
+              </button>
+            </div>
+
+            <h1 className="text-2xl lg:text-3xl font-light tracking-wider uppercase text-gray-900 mb-4">
+              {product.name}
+            </h1>
+
+            <div className="mb-8">
+              <div className="text-2xl font-semibold text-gray-900">
+                ₹ {product.price.toLocaleString("en-IN")}.00
+              </div>
+              <p className="text-xs text-gray-500 italic mt-1">MRP Inclusive of all taxes</p>
+            </div>
+
+            {/* Size Selection */}
+            <div className="mb-10">
+              <div className="flex justify-between items-center mb-4">
+                <label className="text-xs font-bold tracking-widest uppercase text-gray-500">
+                  Select Size: <span className="text-black">{selectedSize || "None"}</span>
+                </label>
+                <button className="text-[10px] underline uppercase tracking-widest">Size Guide</button>
+              </div>
+              <div className="grid grid-cols-5 gap-2">
+                {sizes.map((size) => (
+                  <button
+                    key={size.label}
+                    disabled={!size.inStock}
+                    onClick={() => setSelectedSize(size.label)}
+                    className={cn(
+                      "h-12 border flex items-center justify-center text-xs transition-all",
+                      !size.inStock ? "bg-gray-50 text-gray-300 cursor-not-allowed border-gray-100" : "hover:border-black",
+                      selectedSize === size.label ? "bg-black text-white border-black" : "bg-white text-gray-900 border-gray-200"
+                    )}
+                  >
+                    {size.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Full Width Action Button */}
+          <div className="m-auto flex items-center -translate-y-5 w-full ">
+            <AnimatedButton
+              onClick={handleAddToCart}
+               label=" ADD TO CART"
+               className="font-light w-full  "
+            />
+             
+       
+            
+          
+          </div>
+            <Link 
+              to={`/product/${product.id}`}
+              className="block w-full  py-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 hover:text-black transition-colors"
+            >
+              View Full Product Details <ChevronRight className="inline w-3 h-3 ml-1" />
+            </Link>
+        </div>
+      </motion.div>
     </div>
   );
 }

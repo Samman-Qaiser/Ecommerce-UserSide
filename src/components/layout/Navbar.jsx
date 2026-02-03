@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ShoppingBag, User, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
+import { Search, ShoppingBag, User, Menu, X, ChevronDown, ChevronRight, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -24,7 +24,7 @@ import {
   DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu"
 import TypingBanner from '../ui/TypingBanner';
-import CartSidebar from '../../Pages/CartSidebar';
+import CartSidebar from '../CartSidebar';
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -185,6 +185,10 @@ const cartItems = [
               >
                 <Search className="size-5" />
               </Button>
+              <Link to='/whishlist'>
+        <Heart className='cursor-pointer' />
+              </Link>
+      
 
                <DropdownMenu>
                 <DropdownMenuTrigger>
@@ -237,62 +241,6 @@ const cartItems = [
   );
 }
 
-// Mega Dropdown with Multi-level Support
-function MegaDropdown({ submenu, activeSubDropdown, setActiveSubDropdown }) {
-  return (
-    <div className="absolute left-1/2 -translate-x-1/2 top-full w-screen max-w-6xl bg-white shadow-xl border-t z-50">
-      <div className="p-8">
-        <div className="grid grid-cols-4 gap-8">
-          {submenu.map((section, idx) => (
-            <div key={idx} className="relative">
-              <h3 className="font-semibold text-sm text-gray-900 mb-4 uppercase tracking-wide">
-                {section.category}
-              </h3>
-              <ul className="space-y-2">
-                {section.items.map((item, itemIdx) => (
-                  <li
-                    key={itemIdx}
-                    className="relative"
-                    onMouseEnter={() => item.subcategories && setActiveSubDropdown(`${idx}-${itemIdx}`)}
-                    onMouseLeave={() => !item.subcategories && setActiveSubDropdown(null)}
-                  >
-                    <Link
-                      to={item.href}
-                      className="text-sm text-gray-600 hover:text-gray-900 transition-colors flex items-center justify-between group"
-                    >
-                      <span>{item.label}</span>
-                      {item.subcategories && (
-                        <ChevronRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      )}
-                    </Link>
-
-                    {/* Sub-submenu (3rd level) */}
-                    {item.subcategories && activeSubDropdown === `${idx}-${itemIdx}` && (
-                      <div className="absolute left-full top-0 ml-2 w-48 bg-white shadow-lg border rounded-md p-4 z-50">
-                        <ul className="space-y-2">
-                          {item.subcategories.map((subItem, subIdx) => (
-                            <li key={subIdx}>
-                              <Link
-                                to={subItem.href}
-                                className="text-sm text-gray-600 hover:text-gray-900 transition-colors block"
-                              >
-                                {subItem.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // Mobile Menu
 function MobileMenu({ onClose }) {
