@@ -9,6 +9,7 @@ import CheckoutPage from './Pages/Checkout'
 import ContactUsPage from './Pages/ContactUsPage'
 import AllCategories from './Pages/AllCategories'
 import Whislist from './Pages/Whislist'
+import AboutPage from './Pages/AboutUs'
 
 const Approutes = () => {
   return (
@@ -22,6 +23,7 @@ const Approutes = () => {
     <Route path='/checkout' element={<CheckoutPage />}/>
     <Route path='/contactus' element={<ContactUsPage />}/>
     <Route path='/whishlist' element={<Whislist />}/>
+    <Route path='aboutus' element={<AboutPage />}/>
 </Routes>
   )
 }
