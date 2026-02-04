@@ -34,11 +34,30 @@ const productsData = {
 export default function BestSellerSection() {
   const [activeTab, setActiveTab] = useState('sarees');
 
-  const tabs = [
-    { id: 'sarees', label: 'Sarees', icon: <Sparkles className="w-4 h-4" />, link: '/sarees/bestsellers' },
-    { id: 'blouses', label: 'Blouses', icon: <ShoppingBag className="w-4 h-4" />, link: '/blouses/bestsellers' },
-    { id: 'limited', label: 'Limited Drops', icon: <Star className="w-4 h-4" />, link: '/collections/limited-drops' }
-  ];
+const tabs = [
+  {
+    id: 'sarees',
+    label: 'Sarees',
+    slug: 'sarees',
+    name: 'Sarees',
+    icon: <Sparkles className="w-4 h-4" />,
+  },
+  {
+    id: 'blouses',
+    label: 'Blouses',
+    slug: 'blouses',
+    name: 'Blouses',
+    icon: <ShoppingBag className="w-4 h-4" />,
+  },
+  {
+    id: 'limited',
+    label: 'Limited Drops',
+    slug: 'limited',
+    name: 'Limited Drops',
+    icon: <Star className="w-4 h-4" />,
+  },
+]
+
 
   const productsData = { 
     sarees: bestsellerSarees, 
@@ -130,7 +149,16 @@ export default function BestSellerSection() {
         </div>
 
         {/* --- View All CTA --- */}
-      <AnimatedButton label='Explore All Products' align='center'/>
+<AnimatedButton
+  label={`Explore All ${currentTabInfo?.name}`}
+  align="center"
+  to={`/category/${currentTabInfo?.slug}?name=${encodeURIComponent(
+    currentTabInfo?.name
+  )}`}
+/>
+
+
+
       </div>
     </section>
   );

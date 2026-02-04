@@ -16,8 +16,8 @@ const Approutes = () => {
 <Routes>
   <Route path='' element={<Home />}/>
     <Route path='/product/:id' element={<ProductPage />}/>
-    {/* <Route path='/category' element={<AllCategories/>}/> */}
-    <Route path="/category" element={<CategoryPage />} />
+    <Route path='/allcategories' element={<AllCategories/>}/>
+    <Route path="/category/:slug" element={<CategoryPage />} />
     <Route path='thankyou' element={<ThankYou />}/>
     <Route path='/orders' element={<Orders />}/>
     <Route path='/checkout' element={<CheckoutPage />}/>

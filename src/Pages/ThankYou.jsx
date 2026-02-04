@@ -33,7 +33,7 @@ const ThankYou = ({ orderNumber = '123456', customerName = 'Customer' }) => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Button onClick={() => navigate('/shop')} className="flex-1">
+          <Button onClick={() => navigate('/allcategories')} className="flex-1">
             Continue Shopping
           </Button>
           <Button

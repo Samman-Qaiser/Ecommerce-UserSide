@@ -3,7 +3,6 @@ import { ChevronRight, Sparkles } from 'lucide-react';
 import ProductCard from '../product/ProductCard';
 import AnimatedButton from '../ui/AnimmatedButton';
 
-
 const TabbedProducts = () => {
   const [activeTab, setActiveTab] = useState('festive-lehenga');
 
@@ -11,18 +10,21 @@ const TabbedProducts = () => {
   const tabs = [
     {
       id: 'festive-lehenga',
+      slug: 'festive-lehenga',
       label: 'Festive Lehenga',
       icon: '👗',
       description: 'Elegant & Traditional'
     },
     {
       id: 'festive-saree',
+      slug: 'festive-saree',
       label: 'Festive Saree',
       icon: '🪷',
       description: 'Grace & Beauty'
     },
     {
       id: 'ready-to-wear',
+      slug: 'ready-to-wear',
       label: 'Ready to Wear',
       icon: '✨',
       description: 'Comfort & Style'
@@ -42,10 +44,6 @@ const TabbedProducts = () => {
         rating: 4.8,
         reviews: 234,
         image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500',
-        images: [
-          'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500',
-          'https://images.unsplash.com/photo-1583391733956-6c78276477e5?w=500',
-        ],
         badge: 'BEST SELLER',
         stock: 5,
         inStock: true,
@@ -213,19 +211,23 @@ const TabbedProducts = () => {
 
   // Get current tab's products
   const currentProducts = productsData[activeTab] || [];
+  const activeTabInfo = tabs.find(tab => tab.id === activeTab);
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-white via-purple-50/30 to-pink-50/30">
+    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30">
       <div className="max-w-7xl mx-auto">
+
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-12">
-          <div className="inline-flex items-center gap-2 bg-linear-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-4">
             <Sparkles className="w-4 h-4 text-purple-600" />
             <span className="text-sm font-semibold text-purple-900">Curated Collections</span>
           </div>
+
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
             Shop by Category
           </h2>
+
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
             Explore our exclusive range of festive and ready-to-wear collections
           </p>
@@ -233,118 +235,71 @@ const TabbedProducts = () => {
 
         {/* Tabs Navigation */}
         <div className="mb-8 sm:mb-12">
-          {/* Desktop Tabs */}
           <div className="hidden sm:flex items-center justify-center gap-4 lg:gap-6">
-            {tabs.map((tab) => (
+            {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`
-                  group relative px-6 lg:px-8 py-2 border border-gray-500 border-dotted font-semibold text-base lg:text-lg
-                  transition-all duration-300 transform hover:scale-105
-                  ${activeTab === tab.id
-                    ? ' bg-[#F5E6D3] border border-dotted border-black'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }
+                className={`group relative px-6 lg:px-8 py-2 border border-gray-500 border-dotted font-semibold text-base lg:text-lg transition-all duration-300 transform hover:scale-105
+                  ${activeTab === tab.id ? 'bg-[#F5E6D3] border border-dotted border-black' : 'bg-white text-gray-700 hover:bg-gray-50'}
                 `}
               >
                 <div className="flex items-center gap-3">
-                 
-                  <div className="text-left">
-                    <div className="font-bold">{tab.label}</div>
-                  
-                  </div>
+                  <span className="font-bold">{tab.label}</span>
                 </div>
-
-          
               </button>
             ))}
           </div>
 
-          {/* Mobile Tabs - Horizontal Scroll */}
+          {/* Mobile Tabs */}
           <div className="sm:hidden overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
             <div className="flex gap-3 min-w-max">
-              {tabs.map((tab) => (
+              {tabs.map(tab => (
                 <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`
-                  group relative px-6 lg:px-8 py-2 border border-gray-500 border-dotted font-semibold text-base lg:text-lg
-                  transition-all duration-300 transform hover:scale-105
-                  ${activeTab === tab.id
-                    ? ' bg-[#F5E6D3] border border-dotted border-black'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }
-                `}
-              >
-                  <div className="flex items-center gap-2">
-                
-                    <span>{tab.label}</span>
-                  </div>
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`group relative px-6 py-2 border border-gray-500 border-dotted font-semibold text-base transition-all duration-300 transform hover:scale-105
+                    ${activeTab === tab.id ? 'bg-[#F5E6D3] border border-dotted border-black' : 'bg-white text-gray-700 hover:bg-gray-50'}
+                  `}
+                >
+                  {tab.label}
                 </button>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Products Grid with Animation */}
-        <div className="relative w-full lg:w-[90%] m-auto ">
-          {/* Content */}
-          <div 
-            key={activeTab}
-            className="grid grid-cols-1 justify-items-center sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 animate-fadeIn"
-          >
-            {currentProducts.map((product, index) => (
-              <div
-                key={product.id}
-                style={{
-                  animation: `slideUp 0.5s ease-out ${index * 0.1}s both`
-                }}
-              >
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
+        {/* Products Grid */}
+        <div className="relative w-full lg:w-[90%] m-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          {currentProducts.map((product, index) => (
+            <div
+              key={product.id}
+              style={{ animation: `slideUp 0.5s ease-out ${index * 0.1}s both` }}
+            >
+              <ProductCard product={product} />
+            </div>
+          ))}
         </div>
 
         {/* View All Button */}
-     <AnimatedButton label='View All Products' align='center'/>
+        <div className="mt-8 flex justify-center">
+          <AnimatedButton
+            label={`Explore All ${activeTabInfo?.label}`}
+            align="center"
+            to={`/category/${activeTabInfo?.slug}?name=${encodeURIComponent(activeTabInfo?.label)}`}
+          />
+        </div>
+
       </div>
 
       {/* CSS Animations */}
       <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
         @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.4s ease-out;
-        }
-
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </section>
   );

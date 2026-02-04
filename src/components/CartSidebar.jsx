@@ -66,7 +66,7 @@ const CartSidebar = ({ children }) => {
               Start adding products
             </p>
             <SheetClose asChild>
-              <Link to="/">
+              <Link to="/allcategories">
                 <Button
                   variant="outline"
                   className="border-black text-black rounded-none"

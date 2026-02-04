@@ -25,8 +25,8 @@ const ImageTextSection = () => {
             fabrics ensure you stay comfortable and chic. Embrace the perfect fusion 
             of fashion and ease.
           </p>
-          <div className="flex justify-center lg:justify-start">
-            <AnimatedButton label="View More" className="bg-[#A07B50]   " />
+          <div className="flex justify-center  lg:justify-start">
+            <AnimatedButton label="View More" className="bg-[#A07B50]  text-center " to='/allcategories' />
           </div>
         </motion.div>
 

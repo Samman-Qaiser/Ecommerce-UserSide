@@ -1,13 +1,15 @@
 import React from "react";
 import { ArrowRight, Sparkles, TrendingUp, Star } from "lucide-react";
 import AnimatedButton from "../ui/AnimmatedButton";
+import { Link } from "react-router-dom";
 
 const FeaturedCollection = () => {
     // Collections data with Bento grid sizes
     const collections = [
         {
             id: 1,
-            title: "Formal Wear",
+            name: "Formal Wear",
+            slug:"formal-wear",
             subtitle: "Hot Trending",
             itemCount: 124,
             image:
@@ -18,7 +20,8 @@ const FeaturedCollection = () => {
         },
         {
             id: 2,
-            title: "Festive Wear",
+            name: "Festive Wear",
+               slug:"festive-wear",
             subtitle: "Cozy Vibes",
             itemCount: 89,
             image: "festive-wear.jfif",
@@ -28,7 +31,8 @@ const FeaturedCollection = () => {
         },
         {
             id: 3,
-            title: "Silk Saree",
+            name: "Silk Saree",
+               slug:"silk-saree",
             subtitle: "Complete Look",
             itemCount: 156,
             image:
@@ -39,7 +43,8 @@ const FeaturedCollection = () => {
         },
         {
             id: 4,
-            title: "Traditional Wear",
+            name: "Traditional Wear",
+               slug:"traditional-wear",
             subtitle: "Active Lifestyle",
             itemCount: 67,
             image: "traditional-wear.jfif",
@@ -48,7 +53,8 @@ const FeaturedCollection = () => {
         },
         {
             id: 5,
-            title: "Office Wear",
+            name: "Office Wear",
+               slug:"office-wear",
             subtitle: "Business Ready",
             itemCount: 93,
             image:
@@ -59,16 +65,18 @@ const FeaturedCollection = () => {
         },
         {
             id: 6,
-            title: "Fancy Saree",
+            name: "Fancy Saree",
+               slug:"fancy-saree",
             subtitle: "Must Have",
             itemCount: 201,
             image:
-                "fancy-saree.jfif",
+                "./fancy-saree.jfif",
          
             size: "large", // Takes 2 columns
             icon: Sparkles,
         },
     ];
+    
 
     // Bento grid size classes
     const sizeClasses = {
@@ -101,18 +109,21 @@ const FeaturedCollection = () => {
                     {collections.map((collection, index) => {
                         const Icon = collection.icon;
                         return (
-                            <div
+      
+                                  <div
                                 key={collection.id}
                                 className={`group relative overflow-hidden rounded-md shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${sizeClasses[collection.size]}`}
                                 style={{
                                     animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
                                 }}
-                            >
+                            >                      <Link   to={`/category/${collection?.slug}?name=${encodeURIComponent(
+   collection?.name
+  )}`}>
                                 {/* Background Image */}
                                 <div className="absolute inset-0">
                                     <img
                                         src={collection.image}
-                                        alt={collection.title}
+                                        alt={collection.name}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
 
@@ -166,7 +177,9 @@ const FeaturedCollection = () => {
 
                                 {/* Border Glow Effect */}
                                 <div className="absolute inset-0 rounded-3xl border-2 border-white/0 group-hover:border-white/30 transition-all duration-500"></div>
-                            </div>
+                            </Link>  </div>
+                          
+                          
                         );
                     })}
                 </div>
@@ -174,7 +187,7 @@ const FeaturedCollection = () => {
                 {/* Bottom CTA */}
         
             </div>
-  <AnimatedButton label="Discover All Collections" align="center"/>
+  <AnimatedButton label="Discover All Collections" align="center" to='/allcategories'/>
         </section>
     );
 };

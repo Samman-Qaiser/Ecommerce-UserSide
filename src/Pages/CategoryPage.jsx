@@ -25,7 +25,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
+import { useParams, useSearchParams } from 'react-router-dom'
 import ProductCard from "../components/product/ProductCard";
 
 // Filters Component
@@ -159,140 +159,12 @@ const Filters = ({
 // Main Category Page Component
 const CategoryPage = ({
   categoryData = {
-    name: "Silk Saree",
-    bannerImage: "./web-banner02.jpg",
+
+    bannerImage: "/web-banner03.jpg",
     description: "Explore our wide range of electronic products",
   },
   products = [
-    {
-      id: 11,
-      name: "REGAL BLUE",
-      description: "Designer Blouse",
-      category: "Silk",
-      price: 1800,
-      badge: "NEW",
-      rating: 4.8,
-      reviews: 234,
-      stock: 10,
-      image:
-        "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500",
-      images: [
-        "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500",
-      ],
-    },
-    {
-      id: 12,
-      name: "CLASSIC CRIMSON",
-      description: "Embroidered Blouse",
-      category: "Cotton",
-      price: 1200,
-      badge: "BEST SELLER",
-      rating: 5.0,
-      reviews: 567,
-      stock: 5,
-      image:
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",
-      images: [
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",
-      ],
-    },
-    {
-      id: 13,
-      name: "GOLDEN TOUCH",
-      description: "Silk Blouse",
-      category: "Silk",
-      price: 2200,
-      badge: "TOP RATED",
-      rating: 4.9,
-      reviews: 423,
-      stock: 8,
-      image:
-        "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500",
-      images: [
-        "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500",
-      ],
-    },
-    {
-      id: 14,
-      name: "PEARL ELEGANCE",
-      description: "Designer Blouse",
-      category: "Cotton",
-      price: 1500,
-      badge: "NEW",
-      rating: 4.85,
-      reviews: 312,
-      stock: 12,
-      image:
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",
-      images: [
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",
-      ],
-    },
-    {
-      id: 15,
-      name: "VELVET DREAM",
-      description: "Velvet Blouse",
-      category: "Velvet",
-      price: 2800,
-      badge: "BEST SELLER",
-      rating: 5.0,
-      reviews: 678,
-      stock: 4,
-      image:
-        "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500",
-      images: [
-        "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500",
-      ],
-    },
-    {
-      id: 16,
-      name: "FLORAL FANTASY",
-      description: "Printed Blouse",
-      category: "Cotton",
-      price: 1100,
-      badge: "SALE",
-      originalPrice: 1500,
-      rating: 4.7,
-      reviews: 189,
-      stock: 20,
-      image:
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",
-      images: [
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",
-      ],
-    },
-    {
-      id: 17,
-      name: "MIRROR WORK MAGIC",
-      description: "Embroidered Blouse",
-      category: "Silk",
-      price: 2500,
-      badge: "TOP RATED",
-      rating: 4.95,
-      reviews: 445,
-      stock: 6,
-      image:
-        "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500",
-      images: [
-        "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500",
-      ],
-    },
-    {
-      id: 18,
-      name: "CONTEMPORARY CHIC",
-      description: "Modern Blouse",
-      category: "Cotton",
-      price: 1350,
-      badge: "NEW",
-      rating: 4.8,
-      reviews: 267,
-      stock: 15,
-      image:
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",
-      images: [
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",
-      ],
-    },
+
     {
       id: 1,
       name: "Royal Silk Lehenga",
@@ -321,7 +193,7 @@ const CategoryPage = ({
       originalPrice: 18999,
       rating: 4.9,
       reviews: 456,
-      image: "./suits.webp",
+      image: "/suits.webp",
       badge: "TOP RATED",
       stock: 3,
       inStock: true,
@@ -380,7 +252,7 @@ const CategoryPage = ({
       originalPrice: 6999,
       rating: 4.7,
       reviews: 234,
-      image: "./silk saree.webp",
+      image: "/silk saree.webp",
       badge: "BEST SELLER",
       stock: 12,
       inStock: true,
@@ -544,7 +416,10 @@ const CategoryPage = ({
 
     return pages;
   };
+  const { slug } = useParams()
+  const [searchParams] = useSearchParams()
 
+  const categoryName = searchParams.get('name')
   // ------------------------------
   return (
     <div className="min-h-screen bg-background">
@@ -559,8 +434,8 @@ const CategoryPage = ({
           
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-12">
             <div className="max-w-7xl mx-auto">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 drop-shadow-2xl">
-                {categoryData.name}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold  mb-3 drop-shadow-2xl">
+                {categoryName}
               </h1>
               {categoryData.description && (
                 <p className="text-lg md:text-xl text-white/90 max-w-2xl drop-shadow-lg">

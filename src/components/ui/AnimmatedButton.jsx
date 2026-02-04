@@ -9,14 +9,15 @@ const AnimatedButton = ({
   showIcon = true,
   icon: CustomIcon,
   onClick,
-  align = "left" // Naya prop: Default hum 'left' rakhein gy
+  align = "responsive" // Default ab "responsive" rakha
 }) => {
-  
-  // Alignment logic
+
+  // Alignment logic with responsive support
   const alignmentClass = {
     left: "text-left",
     center: "text-center",
-    right: "text-right"
+    right: "text-right",
+    responsive: "text-center lg:text-left" // Mobile: center, lg: left
   }[align];
 
   const ButtonContent = (
@@ -38,7 +39,6 @@ const AnimatedButton = ({
   );
 
   return (
-    // Yahan hum alignmentClass use kar rahy hain
     <div className={`${alignmentClass} w-full`}>
       {to ? (
         <Link to={to} className="inline-block">{ButtonContent}</Link>

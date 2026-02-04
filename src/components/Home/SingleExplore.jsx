@@ -30,7 +30,7 @@ const SingleExplore = () => {
         </p>
 
         <AnimatedButton 
-          to="/shop" 
+        to='/allcategories'
           label="Explore More" 
           className="py-5 border-[#A07B50] text-[#A07B50] hover:border-black" 
         />

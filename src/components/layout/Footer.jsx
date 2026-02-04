@@ -17,10 +17,10 @@ export const Footer = () => {
   ];
 
   const companyLinks = [
-    { name: "Our Stores", link: "#" },
-    { name: "About Us", link: "#" },
-    { name: "Contact Us", link: "#" },
-    { name: "Pay online", link: "#" },
+    { name: "Our Stores", link: "/" },
+    { name: "About Us", link: "/aboutus" },
+    { name: "Contact Us", link: "/contactus" },
+
   ];
 
 const paymentMethods = [
