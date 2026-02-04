@@ -51,7 +51,7 @@ export default function ProductCard({ product }) {
   return (
     <>
       <div
-        className="group relative border-none shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer bg-transparent"
+        className="group rounded-md relative border-none shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer bg-transparent"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -60,9 +60,9 @@ export default function ProductCard({ product }) {
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full rounded-md h-full object-cover transition-transform duration-500 group-hover:scale-105"
           /> 
-          <Badge className='absolute top-0 left-0 rounded-none'>{product.badge}</Badge>
+          <Badge className='absolute top-2 rounded-t-r-md left-1 '>{product.badge}</Badge>
 
        
 

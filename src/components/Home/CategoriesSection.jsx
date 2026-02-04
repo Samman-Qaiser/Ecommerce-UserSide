@@ -6,11 +6,11 @@ const categories = [
   { name: "Saree", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=200", link: "/shop/saree" },
   { name: "Blouse", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=200", link: "/shop/blouse" },
   { name: "Pre Draped", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=200", link: "/shop/pre-draped" },
-  { name: "Dresses", img: "https://images.unsplash.com/photo-1539008835270-33151465c907?q=80&w=200", link: "/shop/dresses" },
+  { name: "Work Sarees", img: "./Work-Sarees.jpg", link: "/shop/dresses" },
   { name: "Kurta", img: "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?q=80&w=200", link: "/shop/kurta" },
-  { name: "Lehenga", img: "https://images.unsplash.com/photo-1594190999659-7c933c571ce4?q=80&w=200", link: "/shop/lehenga" },
-  { name: "Men", img: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=200", link: "/shop/men" },
-  { name: "Combo", img: "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?q=80&w=200", link: "/shop/combo" },
+  { name: "Lehenga", img: "./suits.webp", link: "/shop/lehenga" },
+  { name: "Silk Saree", img: "./silk saree.webp", link: "/shop/men" },
+  { name: "Ready To Wear", img: "./ready-to-wear.webp", link: "/shop/combo" },
 ];
 
 const CategoriesSection = () => {

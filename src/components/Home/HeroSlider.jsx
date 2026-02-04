@@ -3,9 +3,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Landscape images for desktop
 const bannersLandscape = [
-  "https://picsum.photos/1200/500?random=1",
-  "https://picsum.photos/1200/500?random=2",
-  "https://picsum.photos/1200/500?random=3",
+  "./web-banner01.jpg",
+  "./web-banner02.jpg",
+  "./web-banner03.jpg",
 ];
 
 // Portrait images for XS / mobile

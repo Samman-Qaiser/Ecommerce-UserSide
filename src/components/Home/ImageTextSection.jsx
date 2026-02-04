@@ -17,7 +17,7 @@ const ImageTextSection = () => {
           transition={{ duration: 0.8 }}
           className="w-full lg:w-1/2 text-center lg:text-left space-y-6"
         >
-          <h2 className="text-4xl lg:text-5xl  leading-snug">
+          <h2 className="text-4xl lg:text-5xl font-bold  leading-snug">
             Cosy & comfortable <br /> fabric
           </h2>
           <p className="text-gray-600 text-base lg:text-lg leading-relaxed font-light">

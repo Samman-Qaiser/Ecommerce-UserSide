@@ -9,9 +9,9 @@ import AnimatedButton from '../ui/AnimmatedButton';
 
 const bestsellerSarees = [
   { id: 1, name: 'CHERRY BLOSSOM', description: 'Saree with blouse piece', category: 'Cotton', price: 3800, badge: 'NEW', rating: 4.9, reviews: 456, image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500' },
-  { id: 2, name: 'ROYAL SILK BEAUTY', description: 'Pure Silk Saree', category: 'Silk', price: 8900, badge: 'BEST SELLER', rating: 5.0, reviews: 892, image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e5?w=500' },
+  { id: 2, name: 'ROYAL SILK BEAUTY', description: 'Pure Silk Saree', category: 'Silk', price: 8900, badge: 'BEST SELLER', rating: 5.0, reviews: 892, image: './silk saree.webp' },
   { id: 3, name: 'ETHNIC CHARM', description: 'Handloom Saree', category: 'Chanderi', price: 5200, badge: 'SALE', rating: 4.8, reviews: 623, image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500' },
-  { id: 4, name: 'SUMMER BREEZE', description: 'Cotton Saree', category: 'Cotton', price: 3200, badge: 'TOP RATED', rating: 4.95, reviews: 734, image: 'https://images.unsplash.com/photo-1606522321798-c51a9b286e0a?w=500' },
+  { id: 4, name: 'SUMMER BREEZE', description: 'Cotton Saree', category: 'Cotton', price: 3200, badge: 'TOP RATED', rating: 4.95, reviews: 734, image: 'ready-to-wear.webp' },
 ];
 
 const bestsellerBlouses = [
@@ -23,7 +23,7 @@ const bestsellerBlouses = [
 
 const limitedDrops = [
   { id: 21, name: 'WINTER COLLECTION', description: 'Limited Edition Saree', category: 'Pashmina', price: 18900, badge: 'NEW', rating: 5.0, reviews: 89, image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500' },
-  { id: 22, name: 'HERITAGE SERIES', description: 'Exclusive Design', category: 'Silk', price: 22500, badge: 'BEST SELLER', rating: 5.0, reviews: 67, image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e5?w=500' },
+  { id: 22, name: 'HERITAGE SERIES', description: 'Exclusive Design', category: 'Silk', price: 22500, badge: 'BEST SELLER', rating: 5.0, reviews: 67, image: 'ready-to-wear.webp' },
 ];
 const productsData = { 
   sarees: bestsellerSarees, 
