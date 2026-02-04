@@ -11,7 +11,7 @@ import {
   increaseQty,
   decreaseQty,
 } from "../redux/cartSlice";
-import { Trash2, Minus, Plus, CreditCard, Truck, Lock } from 'lucide-react'
+import { Trash2, Minus, Plus, CreditCard, Truck, Lock, Info } from 'lucide-react'
 
 const CheckoutPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm()
@@ -20,14 +20,59 @@ const CheckoutPage = () => {
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.cart.items);
   
-  // Logic: 99 INR for COD, Free for Stripe
+  // ============================================
+  // PAYMENT CALCULATION LOGIC
+  // ============================================
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
-  const shippingFee = paymentMethod === 'cod' ? 99 : 0
-  const totalAmount = subtotal + shippingFee
+  
+  // COD Shipping: ₹99
+  const codShippingFee = 99
+  
+  // COD Advance Payment: ₹500 (via Stripe)
+  const codAdvancePayment = 500
+  
+  let stripeAmount = 0
+  let codAmount = 0
+  let shippingFee = 0
+  let totalAmount = 0
+
+  if (paymentMethod === 'cod') {
+    // COD: Pay ₹500 advance via Stripe + Remaining on delivery
+    shippingFee = codShippingFee
+    totalAmount = subtotal + shippingFee
+    stripeAmount = codAdvancePayment
+    codAmount = totalAmount - codAdvancePayment
+    
+  } else if (paymentMethod === 'prepaid') {
+    // Prepaid: Full payment via Stripe (Free shipping)
+    shippingFee = 0
+    totalAmount = subtotal + shippingFee
+    stripeAmount = totalAmount
+    codAmount = 0
+  }
 
   const onSubmit = (data) => {
-    console.log('Checkout Data:', { ...data, paymentMethod, totalAmount })
-    alert('Order Placed Successfully!')
+    const orderData = {
+      ...data,
+      paymentMethod,
+      subtotal,
+      shippingFee,
+      totalAmount,
+      stripeAmount,
+      codAmount,
+    }
+    
+    console.log('Checkout Data:', orderData)
+    
+    if (paymentMethod === 'cod') {
+      alert(`Order Placed!\n\nAdvance Payment (Stripe): ₹${stripeAmount}\nCOD Amount: ₹${codAmount}\nTotal: ₹${totalAmount}`)
+      // Redirect to Stripe payment for ₹500
+      // handleStripePayment(stripeAmount)
+    } else {
+      alert(`Order Placed!\n\nTotal Payment (Stripe): ₹${stripeAmount}`)
+      // Redirect to Stripe payment for full amount
+      // handleStripePayment(stripeAmount)
+    }
   }
 
   return (
@@ -86,42 +131,62 @@ const CheckoutPage = () => {
               <RadioGroup
                 value={paymentMethod}
                 onValueChange={setPaymentMethod}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                className="grid grid-cols-2 gap-4"
               >
                 {/* COD Option */}
                 <Label
                   htmlFor="cod"
-                  className={`flex items-center justify-between p-4 border rounded-xl cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-black bg-slate-50 ring-1 ring-black' : 'border-slate-200 hover:bg-slate-50'}`}
+                  className={`flex flex-col p-2 border rounded-md cursor-pointer transition-all ${
+                    paymentMethod === 'cod' 
+                      ? 'border-black bg-slate-50 ring-2 ring-black ring-offset-1' 
+                      : 'border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                  }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem value="cod" id="cod" />
-                    <div>
-                      <p className="font-bold text-sm">COD</p>
-                      <p className="text-[10px] text-slate-500 italic">+ ₹99 Shipping</p>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value="cod" id="cod" />
+                      <Truck className="w-6 h-6 text-slate-400" />
+                      <div>
+                        <p className="font-bold text-base">Cash on Delivery (COD)</p>
+                        <p className="text-xs text-slate-500 mt-0.5">Pay ₹500 now + Remaining on delivery</p>
+                      </div>
                     </div>
+            
                   </div>
-                  <Truck className="w-5 h-5 text-slate-400" />
                 </Label>
 
-                {/* Stripe Option */}
+                {/* Prepaid Option */}
                 <Label
-                  htmlFor="stripe"
-                  className={`flex items-center justify-between p-4 border rounded-xl cursor-pointer transition-all ${paymentMethod === 'stripe' ? 'border-black bg-slate-50 ring-1 ring-black' : 'border-slate-200 hover:bg-slate-50'}`}
+                  htmlFor="prepaid"
+                  className={`flex flex-col p-2 border rounded-md cursor-pointer transition-all ${
+                    paymentMethod === 'prepaid' 
+                      ? 'border-black bg-slate-50 ring-2 ring-black ring-offset-2' 
+                      : 'border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                  }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem value="stripe" id="stripe" />
-                    <div>
-                      <p className="font-bold text-sm">Online Payment</p>
-                      <p className="text-[10px] text-green-600 font-medium">Free Shipping</p>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value="prepaid" id="prepaid" />
+                        <CreditCard className="w-6 h-6 text-slate-400" />
+                      <div>
+                        <p className="font-bold text-base">Prepaid (Online Payment) </p>
+                        <p className="text-xs text-green-600 font-medium mt-0.5">✓ Free Shipping</p>
+                      </div>
                     </div>
+                  
                   </div>
-                  <CreditCard className="w-5 h-5 text-slate-400" />
+                  
+          
                 </Label>
               </RadioGroup>
             </div>
 
+            {/* Submit Button */}
             <Button type="submit" className="w-full py-7 text-lg font-bold bg-black hover:bg-slate-800 transition-all rounded-xl shadow-lg shadow-slate-200">
-              Complete Order • ₹{totalAmount.toLocaleString()}
+              {paymentMethod === 'cod' 
+                ? `Pay ₹${stripeAmount} Now (Advance)` 
+                : `Pay ₹${stripeAmount.toLocaleString()} (Full Payment)`
+              }
             </Button>
           </form>
         </div>
@@ -163,8 +228,6 @@ const CheckoutPage = () => {
                   </div>
                 ))
               )}
-                   
-                  
             </div>
 
             <div className="space-y-3 pt-6 border-t border-slate-100">
@@ -180,16 +243,47 @@ const CheckoutPage = () => {
               </div>
               <Separator className="my-2" />
               <div className="flex justify-between items-center pt-2">
-                <span className="text-lg font-bold">Total Payable</span>
+                <span className="text-lg font-bold">Total Amount</span>
                 <span className="text-2xl font-black tracking-tight text-black">₹{totalAmount.toLocaleString()}</span>
-                
               </div>
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Lock className="w-4 h-4" />
-                      <span>Secure checkout • SSL encrypted</span>
+
+              {/* Payment Breakdown */}
+              {paymentMethod === 'cod' ? (
+                <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                  <p className="text-xs font-bold text-blue-900 mb-2">Payment Breakdown:</p>
+                  <div className="space-y-1.5 text-xs text-blue-800">
+                    <div className="flex justify-between">
+                      <span>Stripe (Now):</span>
+                      <span className="font-bold">₹{stripeAmount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>COD (On Delivery):</span>
+                      <span className="font-bold">₹{codAmount.toLocaleString()}</span>
                     </div>
                   </div>
+                </div>
+              ) : (
+                <div className="mt-4 p-4 bg-green-50 rounded-xl border border-green-200">
+                  <p className="text-xs font-bold text-green-900 mb-2">Payment Details:</p>
+                  <div className="space-y-1.5 text-xs text-green-800">
+                    <div className="flex justify-between">
+                      <span>Stripe Payment:</span>
+                      <span className="font-bold">₹{stripeAmount.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-green-600">
+                      <span className="text-lg">✓</span>
+                      <span className="font-medium">Free Shipping Included</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <Lock className="w-4 h-4" />
+                  <span>Secure checkout • SSL encrypted</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

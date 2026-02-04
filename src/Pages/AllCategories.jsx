@@ -66,14 +66,14 @@ const AllCategories = () => {
               />
 
               {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#2D160A]/90 via-transparent to-transparent opacity-70 group-hover:opacity-80 transition-opacity" />
+              <div className="absolute inset-0 bg-linear-to-t from-[#2D160A]/90 via-transparent to-transparent opacity-70 group-hover:opacity-80 transition-opacity" />
 
               {/* Text Info */}
               <div className="absolute bottom-0 left-0 p-5 w-full">
                 <h3 className="text-white text-lg lg:text-xl font-serif tracking-wide leading-tight">
                   {cat.name}
                 </h3>
-                <div className="w-0 h-[1px] bg-[#A07B50] mt-2 group-hover:w-full transition-all duration-500 opacity-60" />
+                <div className="w-0 h-px bg-[#A07B50] mt-2 group-hover:w-full transition-all duration-500 opacity-60" />
               </div>
             </Link>
           </motion.div>
