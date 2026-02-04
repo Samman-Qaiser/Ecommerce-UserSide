@@ -103,7 +103,7 @@ const FeaturedCollection = () => {
                         return (
                             <div
                                 key={collection.id}
-                                className={`group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${sizeClasses[collection.size]}`}
+                                className={`group relative overflow-hidden rounded-md shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${sizeClasses[collection.size]}`}
                                 style={{
                                     animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
                                 }}

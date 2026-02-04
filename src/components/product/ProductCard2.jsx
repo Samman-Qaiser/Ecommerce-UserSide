@@ -19,14 +19,14 @@ const ProductCard = ({ item, isWishlistPage = false }) => {
   return (
     <motion.div
       layout
-      className="group relative h-100 bg-white overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500"
+      className="group rounded-md relative h-100 bg-white overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500"
     >
       {/* --- Image Section --- */}
       <div className="relative h-full w-full overflow-hidden">
         <img 
           src={item.image} 
           alt={item.name} 
-          className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
+          className="w-full h-full  rounded-md object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
         />
         
         {/* Initially Visible Info (Overlay) */}
@@ -46,9 +46,9 @@ const ProductCard = ({ item, isWishlistPage = false }) => {
       </div>
 
       {/* --- Hover Slide-up Panel (Sharp & Professional) --- */}
-      <div className="absolute inset-0 z-20 flex flex-col justify-end">
-        <div className="bg-white translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-[0.22, 1, 0.36, 1] p-6 h-[75%] border-t border-slate-100">
-          <div className="flex flex-col h-full justify-between">
+      <div className="absolute  inset-0 z-20 flex flex-col justify-end">
+        <div className="bg-white rounded-md translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-[0.22, 1, 0.36, 1] p-6 h-[75%] border-t border-slate-100">
+          <div className="flex rounded-md flex-col h-full justify-between">
             
             <div className="space-y-3">
               <div className="flex justify-between items-start">
