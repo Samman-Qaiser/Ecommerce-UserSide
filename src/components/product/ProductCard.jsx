@@ -109,7 +109,7 @@ export default function ProductCard({ product }) {
           <button
             onClick={handleAddToCart}
             className={cn(
-              "absolute bottom-17 right-3 z-20 flex items-center justify-center h-9 w-9 rounded-full transition-all duration-300 shadow-md",
+              "absolute bottom-2 right-3 z-20 flex items-center justify-center h-9 w-9 rounded-full transition-all duration-300 shadow-md",
               "opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0",
               isAdded ? "bg-green-600 text-white" : "bg-black text-white hover:bg-gray-800"
             )}

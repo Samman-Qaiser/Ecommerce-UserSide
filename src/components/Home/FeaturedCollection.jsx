@@ -7,65 +7,64 @@ const FeaturedCollection = () => {
     const collections = [
         {
             id: 1,
-            title: "Summer Collection",
+            title: "Formal Wear",
             subtitle: "Hot Trending",
             itemCount: 124,
             image:
-                "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800",
-            gradient: "from-orange-400 to-pink-500",
+                "formal-wear.jfif",
+           
             size: "large", // Takes 2 columns
             icon: TrendingUp,
         },
         {
             id: 2,
-            title: "Winter Wear",
+            title: "Festive Wear",
             subtitle: "Cozy Vibes",
             itemCount: 89,
-            image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500",
-            gradient: "from-blue-400 to-cyan-500",
+            image: "festive-wear.jfif",
+      
             size: "small",
             icon: Sparkles,
         },
         {
             id: 3,
-            title: "Accessories",
+            title: "Silk Saree",
             subtitle: "Complete Look",
             itemCount: 156,
             image:
-                "https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?w=500",
-            gradient: "from-purple-400 to-indigo-500",
+                "./silk saree.webp",
+         
             size: "small",
             icon: Star,
         },
         {
             id: 4,
-            title: "Sports & Fitness",
+            title: "Traditional Wear",
             subtitle: "Active Lifestyle",
             itemCount: 67,
-            image: "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500",
-            gradient: "from-green-400 to-teal-500",
+            image: "traditional-wear.jfif",
             size: "medium",
             icon: TrendingUp,
         },
         {
             id: 5,
-            title: "Formal Wear",
+            title: "Office Wear",
             subtitle: "Business Ready",
             itemCount: 93,
             image:
-                "https://images.unsplash.com/photo-1507680434567-5739c80be1ac?w=800",
-            gradient: "from-gray-700 to-gray-900",
+                "./Work-Sarees.jpg",
+   
             size: "medium",
             icon: Star,
         },
         {
             id: 6,
-            title: "Trending Now",
+            title: "Fancy Saree",
             subtitle: "Must Have",
             itemCount: 201,
             image:
-                "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800",
-            gradient: "from-red-400 to-rose-500",
+                "fancy-saree.jfif",
+         
             size: "large", // Takes 2 columns
             icon: Sparkles,
         },
