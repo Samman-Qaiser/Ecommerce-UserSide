@@ -99,7 +99,7 @@ const AccountCreationForm = ({ orderId, orderData, onSuccess }) => {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="Ayesha Khan"
+                  placeholder="Enter Your Name"
                   className="pl-10 h-11 border-slate-200 focus-visible:ring-0 focus:border-[#732D92] rounded-lg"
                   required
                 />

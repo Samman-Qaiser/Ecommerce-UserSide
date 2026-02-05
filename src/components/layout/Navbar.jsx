@@ -197,13 +197,13 @@ const cartItems = [
                   <User className="size-5" />
                 </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className='p-4 w-48 space-y-2 cursor-pointer'>
+                <DropdownMenuContent className='p-4 w-58 space-y-2 cursor-pointer'>
              
      
 
 
   {isAuthenticated ? (
-    <p className="flex items-center gap-2 font-medium">WELCOME <span className='text-xs'>{user.name}</span></p>
+    <p className="flex items-center gap-2 font-medium">WELCOME <span >{user.name} </span></p>
   ) : (
     <DropdownMenuItem asChild>
       <Link to="/login">
