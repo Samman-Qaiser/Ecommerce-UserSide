@@ -434,7 +434,7 @@ const CategoryPage = ({
           
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-12">
             <div className="max-w-7xl mx-auto">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold  mb-3 drop-shadow-2xl">
+              <h1 className="text-4xl text-white md:text-5xl lg:text-6xl font-bold  mb-3 drop-shadow-2xl">
                 {categoryName}
               </h1>
               {categoryData.description && (
@@ -569,7 +569,7 @@ const CategoryPage = ({
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {currentProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}

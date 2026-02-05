@@ -10,6 +10,8 @@ import ContactUsPage from './Pages/ContactUsPage'
 import AllCategories from './Pages/AllCategories'
 import Whislist from './Pages/Whislist'
 import AboutPage from './Pages/AboutUs'
+import Login from './Auth/Login'
+import AuthPage from './Auth/Login'
 
 const Approutes = () => {
   return (
@@ -24,6 +26,7 @@ const Approutes = () => {
     <Route path='/contactus' element={<ContactUsPage />}/>
     <Route path='/whishlist' element={<Whislist />}/>
     <Route path='aboutus' element={<AboutPage />}/>
+    <Route path='/login' element={<AuthPage />}/>
 </Routes>
   )
 }

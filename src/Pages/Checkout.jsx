@@ -10,16 +10,18 @@ import {
   removeFromCart,
   increaseQty,
   decreaseQty,
+  clearCart,
 } from "../redux/cartSlice";
 import { Trash2, Minus, Plus, CreditCard, Truck, Lock, Info } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const CheckoutPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const [paymentMethod, setPaymentMethod] = useState('cod')
-
+  const navigate=useNavigate()
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.cart.items);
-  
+
   // ============================================
   // PAYMENT CALCULATION LOGIC
   // ============================================
@@ -68,10 +70,16 @@ const CheckoutPage = () => {
       alert(`Order Placed!\n\nAdvance Payment (Stripe): ₹${stripeAmount}\nCOD Amount: ₹${codAmount}\nTotal: ₹${totalAmount}`)
       // Redirect to Stripe payment for ₹500
       // handleStripePayment(stripeAmount)
+      dispatch(clearCart())
+            navigate('/thankyou')
+
     } else {
       alert(`Order Placed!\n\nTotal Payment (Stripe): ₹${stripeAmount}`)
       // Redirect to Stripe payment for full amount
       // handleStripePayment(stripeAmount)
+            navigate('/thankyou')
+                  dispatch(clearCart())
+
     }
   }
 

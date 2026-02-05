@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import TypingBanner from '../ui/TypingBanner';
 import CartSidebar from '../CartSidebar';
+import { useSelector } from 'react-redux';
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -32,7 +33,7 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const {user ,isAuthenticated}=useSelector((state)=>state.auth)
   const itemCount = 0; // Redux Toolkit se baad mein replace karenge
   const navigate = useNavigate();
 
@@ -197,14 +198,26 @@ const cartItems = [
                 </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='p-4 w-48 space-y-2 cursor-pointer'>
-                  <h1 className='text-xl text-center'>WELCOME</h1>
-                  <DropdownMenuItem>
-                  <div className='bg-black text-lg text-white p-2'>
-                    <span>Login</span>/<span>SignUp</span>
-                  </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem><Link to='/orders'>Orders</Link></DropdownMenuItem>
-                  <DropdownMenuItem><Link to='/adresses'>Adresses</Link></DropdownMenuItem>
+             
+     
+
+
+  {isAuthenticated ? (
+    <p className="flex items-center gap-2 font-medium">WELCOME <span className='text-xs'>{user.name}</span></p>
+  ) : (
+    <DropdownMenuItem asChild>
+      <Link to="/login">
+        <div className="bg-black text-lg text-white p-2 text-center rounded">
+          <span>Login</span> / <span>Sign Up</span>
+        </div>
+      </Link>
+    </DropdownMenuItem>
+  )}
+
+  <DropdownMenuItem asChild>
+    <Link to="/orders">Orders</Link>
+  </DropdownMenuItem>
+
                 </DropdownMenuContent>
                </DropdownMenu>
 <CartSidebar cartItems={cartItems}>
