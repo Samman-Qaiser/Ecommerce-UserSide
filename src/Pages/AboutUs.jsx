@@ -10,7 +10,7 @@ const AboutPage = () => {
   };
 
   return (
-    <div className="bg-[#FDF8F1] min-h-screen  text-[#2D160A]">
+    <div className="bg-[#FDF8F1] min-h-screen ">
       
       {/* HERO SECTION: Minimalist & Grand */}
       <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
@@ -41,7 +41,7 @@ const AboutPage = () => {
       {/* PHILOSOPHY: Image Left, Text Right (Arch Style) */}
       <section className="max-w-7xl mx-auto py-20 px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <motion.div {...fadeIn} className="relative group">
-          <div className="w-full h-[500px] lg:h-[650px] rounded-t-full overflow-hidden border-[15px] border-white shadow-2xl">
+          <div className="w-full h-125 lg:h-162.5 rounded-t-full overflow-hidden border-15 border-white shadow-2xl">
             <img 
               src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800" 
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"

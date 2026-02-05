@@ -53,6 +53,7 @@ export const menuData = {
       ]
     },
      {id:2 , label:'Suits' ,href:'/suits'},
+          {id:5 , label:'All Collections' ,href:'/allcategories'},
         { id: 3, label: 'Contact Us', href: '/contactus' },
     { id: 4, label: 'About Us', href: '/aboutus' },
   ],

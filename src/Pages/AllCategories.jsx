@@ -4,16 +4,16 @@ import { Link } from 'react-router-dom';
 
 const categories = [
   { id: 1, name: "Ready To Wear", img: "./web-banner01.jpg", size: "large", slug: "ready-to-wear" },
-  { id: 2, name: "Silk Sarees", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb", size: "small", slug: "silk" },
+  { id: 2, name: "Silk Sarees", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb", size: "medium", slug: "silk" },
   { id: 3, name: "Cotton Blend", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b", size: "medium", slug: "cotton" },
   { id: 4, name: "Designer Blouse", img: "./silk saree.webp", size: "medium", slug: "blouse" },
   { id: 5, name: "Lehengas", img: "./web-banner02.jpg", size: "large", slug: "lehenga" },
   { id: 6, name: "Pre-Draped", img: "./Work-Sarees.jpg", size: "medium", slug: "pre-draped" },
   { id: 7, name: "Wedding Edit", img: "./ready-to-wear.webp", size: "medium", slug: "wedding" },
-  { id: 8, name: "Kurtas", img: "./suits.webp", size: "small", slug: "kurta" },
+  { id: 8, name: "Kurtas", img: "./suits.webp", size: "medium", slug: "kurta" },
   { id: 11, name: "Daily Wear", img: "./formal-wear.jfif", size: "large", slug: "daily" },
-  { id: 9, name: "Men's Wear", img: "./fancy-saree.jfif", size: "medium", slug: "men" },
-  { id: 10, name: "Accessories", img: "./festive-wear.jfif", size: "small", slug: "accessories" },
+  { id: 9, name: "wedding wear", img: "./fancy-saree.jfif", size: "large", slug: "men" },
+  { id: 10, name: "Accessories", img: "./festive-wear.jfif", size: "medium", slug: "accessories" },
   { id: 12, name: "Luxury Collection", img: "./traditional-wear.jfif", size: "medium", slug: "luxury" },
 ];
 
@@ -40,7 +40,7 @@ const AllCategories = () => {
       </div>
 
       {/* Bento Grid with 'dense' flow to fill gaps */}
-      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 auto-rows-[180px] lg:auto-rows-[220px] grid-flow-dense">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 auto-rows-[180px] lg:auto-rows-[150px] grid-flow-dense">
         {categories.map((cat, index) => (
           <motion.div
             key={cat.id}
@@ -62,7 +62,7 @@ const AllCategories = () => {
               <img 
                 src={cat.img} 
                 alt={cat.name} 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                className="w-full m-auto object-top h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
 
               {/* Overlay Gradient */}

@@ -118,7 +118,7 @@ const cartItems = [
                   <DropdownMenu key={item.id}>
                     <DropdownMenuTrigger
                       className={cn(
-                        "text-sm font-medium flex items-center gap-1 py-6 outline-none",
+                        "text-sm  flex items-center gap-1 py-6 outline-none",
                         item.highlighted ? "text-red-600" : "text-gray-900"
                       )}
                     >
@@ -129,7 +129,7 @@ const cartItems = [
                     <DropdownMenuContent align="start" className="min-w-65">
                       {item.submenu.map((section, idx) => (
                         <DropdownMenuSub key={idx}>
-                          <DropdownMenuSubTrigger className="font-semibold">
+                          <DropdownMenuSubTrigger >
                             {section.category}
                           </DropdownMenuSubTrigger>
 
@@ -165,7 +165,7 @@ const cartItems = [
                     key={item.id}
                     to={item.href}
                     className={cn(
-                      "text-sm font-medium py-6",
+                      "text-sm  py-6",
                       item.highlighted ? "text-red-600" : "text-gray-900"
                     )}
                   >
@@ -268,7 +268,7 @@ function MobileMenu({ onClose }) {
                     <button
                       onClick={() => setOpenMenu(openMenu === item.id ? null : item.id)}
                       className={cn(
-                        "flex items-center justify-between w-full py-3 text-sm font-medium transition-colors",
+                        "flex items-center justify-between w-full py-3 text-sm  transition-colors",
                         item.highlighted ? "text-red-600" : "text-gray-900"
                       )}
                     >
