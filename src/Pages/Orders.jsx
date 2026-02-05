@@ -102,7 +102,7 @@ const Orders = () => {
       </div>
       <h3 className="text-xl font-bold text-slate-900">No Orders Yet</h3>
       <p className="text-slate-500 mt-2 mb-8 max-w-70 mx-auto text-sm">
-        Looks like you haven't discovered our ethnic collection yet.
+        Looks like you haven't discovered our  collection yet.
       </p>
       <AnimatedButton
         to="/allcategories"
