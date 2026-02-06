@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronRight, Sparkles } from 'lucide-react';
 import ProductCard from '../product/ProductCard';
 import AnimatedButton from '../ui/AnimmatedButton';
-
+import { motion, AnimatePresence } from 'framer-motion';
 const TabbedProducts = () => {
   const [activeTab, setActiveTab] = useState('festive-lehenga');
 
@@ -235,18 +235,23 @@ const TabbedProducts = () => {
 
         {/* Tabs Navigation */}
         <div className="mb-8 sm:mb-12">
-          <div className="hidden sm:flex items-center justify-center gap-4 lg:gap-6">
-            {tabs.map(tab => (
+         <div className="lg:flex hidden m-auto items-center p-1.5 bg-slate-100/80  backdrop-blur-sm border border-slate-200/50 w-fit">
+            {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`group relative px-6 lg:px-8 py-2 border border-gray-500 border-dotted font-semibold text-base lg:text-lg transition-all duration-300 transform hover:scale-105
-                  ${activeTab === tab.id ? 'bg-[#F5E6D3] border border-dotted border-black' : 'bg-white text-gray-700 hover:bg-gray-50'}
-                `}
+                className={`relative px-6 py-2.5 text-sm lg:text-lg transition-all duration-300 ${
+                  activeTab === tab.id ? 'text-black' : 'text-slate-900 hover:text-slate-900'
+                }`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="font-bold">{tab.label}</span>
-                </div>
+                {activeTab === tab.id && (
+                  <motion.div 
+                    layoutId="activeTabBackground"
+                    className="absolute inset-0 bg-[#F5E6D3] border border-dotted border-gray-700 "
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <span className="relative z-10">{tab.label}</span>
               </button>
             ))}
           </div>
@@ -292,15 +297,7 @@ const TabbedProducts = () => {
 
       </div>
 
-      {/* CSS Animations */}
-      <style jsx>{`
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
+ 
     </section>
   );
 };

@@ -76,8 +76,6 @@ const FeaturedCollection = () => {
             icon: Sparkles,
         },
     ];
-
-
     // Bento grid size classes
     const sizeClasses = {
         small: "col-span-1 row-span-1 h-74 sm:h-80",
@@ -116,7 +114,8 @@ const FeaturedCollection = () => {
                                 style={{
                                     animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
                                 }}
-                            >                      <Link to={`/category/${collection?.slug}?name=${encodeURIComponent(
+                            >     
+                             <Link to={`/category/${collection?.slug}?name=${encodeURIComponent(
                                 collection?.name
                             )}`}>
                                     {/* Background Image */}
