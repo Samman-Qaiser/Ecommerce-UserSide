@@ -64,7 +64,7 @@ const WishlistPage = () => {
 
             <AnimatedButton
               label="Continue Shopping"
-              to="/shop"
+              to="/"
               align="center"
             />
           </motion.div>

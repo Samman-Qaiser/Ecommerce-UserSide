@@ -190,7 +190,7 @@ const CheckoutPage = () => {
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full py-7 text-lg font-bold bg-black hover:bg-slate-800 transition-all rounded-xl shadow-lg shadow-slate-200">
+            <Button variant='outline'  type="submit" className="w-full cursor-pointer rounded-none py-7 text-lg font-bold border border-black transition-all  shadow-lg shadow-slate-200">
               {paymentMethod === 'cod' 
                 ? `Pay ₹${stripeAmount} Now (Advance)` 
                 : `Pay ₹${stripeAmount.toLocaleString()} (Full Payment)`

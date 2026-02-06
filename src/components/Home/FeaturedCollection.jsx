@@ -80,8 +80,8 @@ const FeaturedCollection = () => {
 
     // Bento grid size classes
     const sizeClasses = {
-        small: "col-span-1 row-span-1 h-64 sm:h-72",
-        medium: "col-span-1 sm:col-span-1 row-span-1 h-64 sm:h-80",
+        small: "col-span-1 row-span-1 h-74 sm:h-80",
+        medium: "col-span-1 sm:col-span-1 row-span-1 h-74 sm:h-80",
         large: "col-span-1 sm:col-span-2 row-span-1 h-64 sm:h-72 lg:h-80",
     };
 
@@ -105,7 +105,7 @@ const FeaturedCollection = () => {
                 </div>
 
                 {/* Bento Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 auto-rows-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 ">
                     {collections.map((collection, index) => {
                         const Icon = collection.icon;
                         return (
@@ -124,7 +124,7 @@ const FeaturedCollection = () => {
                                         <img
                                             src={collection.image}
                                             alt={collection.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            className="w-full h-full object-top object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
 
                                         {/* linear Overlay */}

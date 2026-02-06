@@ -270,7 +270,7 @@ const TabbedProducts = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="relative w-full lg:w-[90%] m-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="relative w-full lg:w-[90%] m-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {currentProducts.map((product, index) => (
             <div
               key={product.id}

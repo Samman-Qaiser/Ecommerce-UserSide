@@ -4,16 +4,10 @@ import { Search, ShoppingBag, User, Menu, X, ChevronDown, ChevronRight, Heart } 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Input } from '@/components/ui/input';
+
 import { menuData } from '../../data/menudata';
 import { cn } from '@/lib/utils';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog";
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -26,6 +20,7 @@ import {
 import TypingBanner from '../ui/TypingBanner';
 import CartSidebar from '../CartSidebar';
 import { useSelector } from 'react-redux';
+import SearchOverlay from '../search/SearchOverlay';
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -35,6 +30,8 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const {user ,isAuthenticated}=useSelector((state)=>state.auth)
   const itemCount = 0; // Redux Toolkit se baad mein replace karenge
+
+
   const navigate = useNavigate();
 
  useEffect(() => {
@@ -179,13 +176,21 @@ const cartItems = [
 
             {/* Right Icons */}
             <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsSearchOpen(true)}
-              >
-                <Search className="size-5" />
-              </Button>
+          <Button
+  variant="ghost"
+  size="icon"
+  onClick={() => setIsSearchOpen(true)}
+>
+  <Search className="size-5" />
+</Button>
+
+<SearchOverlay
+  open={isSearchOpen}
+  onClose={() => setIsSearchOpen(false)}
+
+/>
+
+
               <Link to='/whishlist'>
         <Heart className='cursor-pointer' />
               </Link>
@@ -242,14 +247,7 @@ const cartItems = [
 
       </header>
 
-      {/* Search Modal */}
-      <SearchOverlay
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        handleSearch={handleSearch}
-      />
+  
     </>
   );
 }
@@ -262,13 +260,11 @@ function MobileMenu({ onClose }) {
 
   return (
     <>
-      <div className='text-center bg-accent text-white p-2'>CASH ON DELIVERY AVAILABLE</div>
+    
       <div className="flex flex-col h-full bg-white">
         <div className="flex items-center justify-between p-6 border-b">
           <span className="text-2xl font-bold">Suta</span>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-5 w-5" />
-          </Button>
+      
         </div>
 
         <nav className="flex-1 overflow-y-auto p-6">
@@ -359,7 +355,7 @@ function MobileMenu({ onClose }) {
                     to={item.href}
                     onClick={onClose}
                     className={cn(
-                      "block py-3 text-sm font-medium",
+                      "block py-3 text-sm ",
                       item.highlighted ? "text-red-600" : "text-gray-900"
                     )}
                   >
@@ -378,32 +374,4 @@ function MobileMenu({ onClose }) {
   );
 }
 
-// Search Overlay
- function SearchOverlay({ isOpen, onClose, searchQuery, setSearchQuery, handleSearch }) {
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl w-full mx-4">
-        <DialogHeader className="flex items-center justify-between">
-          <DialogTitle>Search Products</DialogTitle>
-       
-        </DialogHeader>
-
-        <form onSubmit={handleSearch} className="flex gap-2 mt-4">
-          <Input
-            type="text"
-            placeholder="Search for sarees, suits, kurtas..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1"
-            autoFocus
-          />
-          <Button type="submit" className="flex items-center gap-2">
-            <Search className="h-4 w-4" />
-            Search
-          </Button>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
-}
 
