@@ -13,7 +13,7 @@ const AboutPage = () => {
     <div className="bg-[#FDF8F1] min-h-screen ">
       
       {/* HERO SECTION: Minimalist & Grand */}
-      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <motion.div 
           initial={{ scale: 1.2, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -21,19 +21,19 @@ const AboutPage = () => {
           className="absolute inset-0"
         >
           <img 
-            src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1600" 
-            className="w-full h-full object-cover opacity-30 grayscale"
+            src="./doritaga.jpg" 
+            className="w-full h-full object-cover object-top"
             alt="Heritage"
           />
         </motion.div>
         <div className="relative text-center z-10 px-4">
-          <motion.h1 
+          {/* <motion.h1 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             className="text-5xl lg:text-8xl uppercase tracking-tighter font-bold mb-4"
           >
             Our Story
-          </motion.h1>
+          </motion.h1> */}
           <div className="w-20 h- mx-auto"></div>
         </div>
       </section>

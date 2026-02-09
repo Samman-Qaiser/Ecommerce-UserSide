@@ -1,9 +1,7 @@
-import React from "react";
+import {Link} from 'react-router-dom'
 import { 
   FaFacebookF, 
   FaInstagram, 
-  FaTwitter, 
-  FaYoutube, 
   FaMapMarkerAlt, 
   FaPhoneAlt, 
   FaPinterest
@@ -11,10 +9,10 @@ import {
 
 export const Footer = () => {
   const helpLinks = [
-    { name: "Privacy Policy", link: "#" },
-    { name: "Shipping Policy", link: "#" },
-    { name: "Cancellation & Return", link: "#" },
-    { name: "Terms & Conditions", link: "#" },
+    { name: "Privacy Policy", link: "/privacypolicy" },
+    { name: "Shipping Policy", link: "/shippingpolicy" },
+    { name: "Cancellation & Return", link: "returnpolicy" },
+    { name: "Terms & Conditions", link: "/termscondition" },
   ];
 
   const companyLinks = [
@@ -69,7 +67,7 @@ const socials = [
             <h4 className="text-lg font-medium tracking-widest uppercase border-b border-[#FDF8F1]/20 pb-2">HELP</h4>
             <ul className="space-y-3 text-sm font-light opacity-80">
               {helpLinks.map((link, i) => (
-                <li key={i} className="hover:opacity-100 transition-opacity"><a href={link.link}>{link.name}</a></li>
+                <li key={i} className="hover:opacity-100 transition-opacity"><Link to={link.link}>{link.name}</Link></li>
               ))}
             </ul>
           </div>

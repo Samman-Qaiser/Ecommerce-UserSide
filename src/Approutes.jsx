@@ -12,6 +12,10 @@ import Whislist from './Pages/Whislist'
 import AboutPage from './Pages/AboutUs'
 import Login from './Auth/Login'
 import AuthPage from './Auth/Login'
+import PrivacyPolicy from './Pages/PrivacyPolicy'
+import TermsCondition from './Pages/TermsCondition'
+import ReturnPolicy from './Pages/ReturnPolicy'
+import ShippingPolicy from './Pages/ShippingPolicy'
 
 const Approutes = () => {
   return (
@@ -27,6 +31,10 @@ const Approutes = () => {
     <Route path='/whishlist' element={<Whislist />}/>
     <Route path='aboutus' element={<AboutPage />}/>
     <Route path='/login' element={<AuthPage />}/>
+    <Route path='/privacypolicy' element={<PrivacyPolicy />}/>
+    <Route path='/termscondition' element={<TermsCondition />}/>
+    <Route path='/returnpolicy' element={<ReturnPolicy />}/>
+    <Route path='/shippingpolicy' element={<ShippingPolicy />}/>
 </Routes>
   )
 }
