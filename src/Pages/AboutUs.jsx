@@ -57,7 +57,7 @@ const AboutPage = () => {
             "Where Tradition Meets the Modern Woman"
           </h2>
           <p className="text-lg text-gray-700 font-light leading-relaxed">
-            Ambika was born out of a passion for the six yards of elegance. We believe that a saree isn't just an outfit; it's a piece of art that carries centuries of Indian heritage.
+          Doritaaga was born out of a passion for the six yards of elegance. We believe that a saree isn't just an outfit; it's a piece of art that carries centuries of Indian heritage.
           </p>
           <p className="text-lg text-gray-700 font-light leading-relaxed">
             Our mission is to simplify elegance. With our <strong>Ready-to-Wear</strong> collections, we've removed the struggle of draping, so you can focus on making memories.

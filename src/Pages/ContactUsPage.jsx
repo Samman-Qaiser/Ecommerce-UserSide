@@ -1,11 +1,11 @@
-import React from 'react'
+import {Link} from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaFacebookF, FaTwitter, FaLinkedinIn } from 'react-icons/fa'
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaFacebookF, FaTwitter, FaLinkedinIn, FaPinterest, FaInstagram } from 'react-icons/fa'
 
 const ContactUsPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm()
@@ -103,34 +103,34 @@ const ContactUsPage = () => {
             <FaMapMarkerAlt className="text-primary mt-1" />
             <div>
               <p className="font-semibold text-gray-900">Address</p>
-              <p className="text-gray-600">123 Main Street, New York, USA</p>
+              <p className="text-gray-600">SECTOR-22A, GURGAON, Gurgaon, Haryana, 122015</p>
             </div>
           </div>
 
           <Separator className="my-4" />
 
           <div className="flex items-center gap-4">
-            <a href="#" className="text-gray-500 hover:text-primary transition">
+            <Link to="https://www.facebook.com/doritaaga" className="text-gray-500 hover:text-primary transition">
               <FaFacebookF size={20} />
-            </a>
-            <a href="#" className="text-gray-500 hover:text-primary transition">
-              <FaTwitter size={20} />
-            </a>
-            <a href="#" className="text-gray-500 hover:text-primary transition">
-              <FaLinkedinIn size={20} />
-            </a>
+            </Link>
+            <Link to="https://www.pinterest.com/doritaaga/" className="text-gray-500 hover:text-primary transition">
+              <FaPinterest size={20} />
+            </Link>
+            <Link to="https://www.instagram.com/doritaaga" className="text-gray-500 hover:text-primary transition">
+              <FaInstagram size={20} />
+            </Link>
           </div>
 
           {/* Optional Map Embed */}
           <div className="mt-8 rounded-xl overflow-hidden shadow-lg">
-            <iframe
-              title="Office Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.892148998511!2d-74.00601528459354!3d40.71277577933021!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a3161f0cb5d%3A0x6e0e7ed6de2c3e1!2sNew%20York%2C%20USA!5e0!3m2!1sen!2s!4v1675284741393!5m2!1sen!2s"
-              className="w-full h-64 border-0"
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
+   <iframe
+  title="Office Location"
+  src="https://www.google.com/maps?q=Sector+22A,+Gurgaon,+Haryana+122015&output=embed"
+  className="w-full h-64 border-0 rounded-lg"
+  loading="lazy"
+  referrerPolicy="no-referrer-when-downgrade"
+></iframe>
+
           </div>
         </div>
       </div>

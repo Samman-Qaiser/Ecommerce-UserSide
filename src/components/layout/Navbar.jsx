@@ -101,11 +101,7 @@ const cartItems = [
 
               {/* Logo */}
               <Link to="/" className="flex items-center">
-                <svg width="80" height="40" viewBox="0 0 80 40" className="text-gray-900">
-                  <text x="0" y="30" fontFamily="'Brush Script MT', cursive" fontSize="32" fill="currentColor">
-                    Suta
-                  </text>
-                </svg>
+            <img src='./logo.jpeg' className='w-30 h-20  hidden lg:inline'/>
               </Link>
             </div>
 
@@ -263,7 +259,7 @@ function MobileMenu({ onClose }) {
     
       <div className="flex flex-col h-full bg-white">
         <div className="flex items-center justify-between p-6 border-b">
-          <span className="text-2xl font-bold">Suta</span>
+               <img src='./logo.jpeg' className='w-30 h-20' />
       
         </div>
 
