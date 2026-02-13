@@ -39,8 +39,8 @@ const socials = [
         
         {/* Column 1: Brand & Socials */}
         <div className="space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left">
-          <div className="space-y-2">
-            <img src='./logo-trans.png' className="w-30 h-24"/>
+          <div className="space-y-2 ">
+            <img src='./logo-trans.png' className="w-30 h-24 m-auto lg:m-0"/>
             <p className="text-sm font-light leading-relaxed max-w-62.5">
               Discover timeless elegance and contemporary style at Doritaga.
             </p>

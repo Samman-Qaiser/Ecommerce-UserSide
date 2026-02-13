@@ -5,6 +5,8 @@ import {
   Filter,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import {
   Select,
@@ -25,8 +27,74 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from "react-router-dom";
 import ProductCard from "../components/product/ProductCard";
+import { cn } from "@/lib/utils";
+import { sampleProducts } from "../data/sampleProducts";
+
+// Color options with actual colors
+const colorOptions = [
+  { name: "Black", value: "black", color: "#2C2C2C" },
+  { name: "Blue", value: "blue", color: "#5B9BD5" },
+  { name: "Brown", value: "brown", color: "#A67C6D" },
+  { name: "Yellow", value: "yellow", color: "#FFD966" },
+  { name: "Green", value: "green", color: "#A9D18E" },
+  { name: "Pink", value: "pink", color: "#E67C9F" },
+  { name: "Gold", value: "gold", color: "#C5A572" },
+  { name: "Orange", value: "orange", color: "#F4B183" },
+  { name: "Light Pink", value: "light-pink", color: "#F4CBCF" },
+  { name: "Purple", value: "purple", color: "#B565A7" },
+  { name: "Peach", value: "peach", color: "#F4A1A1" },
+  { name: "Rust", value: "rust", color: "#C76240" },
+  { name: "Teal", value: "teal", color: "#5B9A9A" },
+  { name: "White", value: "white", color: "#FFFFFF" },
+  { name: "Cream", value: "cream", color: "#FFF2CC" },
+];
+
+// Fabric options
+const fabricOptions = [
+  { name: "Cotton", value: "cotton", count: 6 },
+  { name: "Cotton Acrylic", value: "cotton-acrylic", count: 2 },
+  { name: "Linen Zari", value: "linen-zari", count: 1 },
+  { name: "Modal", value: "modal", count: 1 },
+  { name: "Mul Cotton", value: "mul-cotton", count: 19 },
+  { name: "Viscose Blend", value: "viscose-blend", count: 5 },
+  { name: "Silk", value: "silk", count: 8 },
+  { name: "Georgette", value: "georgette", count: 4 },
+  { name: "Chiffon", value: "chiffon", count: 3 },
+];
+
+// Occasion options
+const occasionOptions = [
+  { name: "Casual Wear", value: "casual", count: 2 },
+  { name: "Evening Wear", value: "evening", count: 5 },
+  { name: "Festive Wear", value: "festive", count: 17 },
+  { name: "Wedding Wear", value: "wedding", count: 7 },
+  { name: "Party Wear", value: "party", count: 12 },
+  { name: "Office Wear", value: "office", count: 4 },
+];
+
+// Collapsible Filter Section Component
+const FilterSection = ({ title, children, defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <div className="border-b border-border pb-4">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full py-2 text-left"
+      >
+        <h3 className="font-semibold text-foreground">{title}</h3>
+        {isOpen ? (
+          <ChevronUp className="h-4 w-4 text-muted-foreground" />
+        ) : (
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+        )}
+      </button>
+      {isOpen && <div className="mt-3">{children}</div>}
+    </div>
+  );
+};
 
 // Filters Component
 const Filters = ({
@@ -39,32 +107,125 @@ const Filters = ({
   return (
     <div className="space-y-6">
       {/* Price Range Filter */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-foreground">Price Range</h3>
-          <button
-            onClick={() => setPriceRange([0, 1000])}
-            className="text-xs text-primary hover:underline"
-          >
-            Reset
-          </button>
+      <FilterSection title="Price Range">
+        <div className="space-y-4">
+          <Slider
+            value={priceRange}
+            onValueChange={setPriceRange}
+            max={10000}
+            step={100}
+            className="w-full"
+          />
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <span>₹{priceRange[0]}</span>
+            <span>₹{priceRange[1]}</span>
+          </div>
         </div>
-        <Slider
-          value={priceRange}
-          onValueChange={setPriceRange}
-          max={50000}
-          step={10}
-          className="w-full"
-        />
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>${priceRange[0]}</span>
-          <span>${priceRange[1]}</span>
+      </FilterSection>
+
+      {/* Color Filter */}
+      <FilterSection title="Colour">
+        <div className="grid grid-cols-5 gap-2">
+          {colorOptions.map((color) => (
+            <button
+              key={color.value}
+              onClick={() => {
+                if (filters.colors.includes(color.value)) {
+                  setFilters({
+                    ...filters,
+                    colors: filters.colors.filter((c) => c !== color.value),
+                  });
+                } else {
+                  setFilters({
+                    ...filters,
+                    colors: [...filters.colors, color.value],
+                  });
+                }
+              }}
+              className={cn(
+                "aspect-square rounded-md border-2 transition-all hover:scale-110",
+                filters.colors.includes(color.value)
+                  ? "border-primary ring-2 ring-primary ring-offset-2"
+                  : "border-gray-300",
+                color.value === "white" && "border-gray-400"
+              )}
+              style={{ backgroundColor: color.color }}
+              title={color.name}
+            />
+          ))}
         </div>
-      </div>
+      </FilterSection>
+
+      {/* Fabric Filter */}
+      <FilterSection title="Fabric">
+        <div className="space-y-2 max-h-60 overflow-y-auto">
+          {fabricOptions.map((fabric) => (
+            <div key={fabric.value} className="flex items-center space-x-2">
+              <Checkbox
+                id={fabric.value}
+                checked={filters.fabrics.includes(fabric.value)}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setFilters({
+                      ...filters,
+                      fabrics: [...filters.fabrics, fabric.value],
+                    });
+                  } else {
+                    setFilters({
+                      ...filters,
+                      fabrics: filters.fabrics.filter((f) => f !== fabric.value),
+                    });
+                  }
+                }}
+              />
+              <Label
+                htmlFor={fabric.value}
+                className="text-sm font-normal cursor-pointer flex-1"
+              >
+                {fabric.name} ({fabric.count})
+              </Label>
+            </div>
+          ))}
+        </div>
+      </FilterSection>
+
+      {/* Occasion Filter */}
+      <FilterSection title="Occasion">
+        <div className="space-y-2">
+          {occasionOptions.map((occasion) => (
+            <div key={occasion.value} className="flex items-center space-x-2">
+              <Checkbox
+                id={occasion.value}
+                checked={filters.occasions.includes(occasion.value)}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setFilters({
+                      ...filters,
+                      occasions: [...filters.occasions, occasion.value],
+                    });
+                  } else {
+                    setFilters({
+                      ...filters,
+                      occasions: filters.occasions.filter(
+                        (o) => o !== occasion.value
+                      ),
+                    });
+                  }
+                }}
+              />
+              <Label
+                htmlFor={occasion.value}
+                className="text-sm font-normal cursor-pointer flex-1"
+              >
+                {occasion.name} ({occasion.count})
+              </Label>
+            </div>
+          ))}
+        </div>
+      </FilterSection>
 
       {/* Discount Filter */}
-      <div className="space-y-3">
-        <h3 className="font-semibold text-foreground">Discount</h3>
+      <FilterSection title="Discount">
         <div className="space-y-2">
           {[
             "10% or more",
@@ -100,11 +261,10 @@ const Filters = ({
             </div>
           ))}
         </div>
-      </div>
+      </FilterSection>
 
       {/* Availability Filter */}
-      <div className="space-y-3">
-        <h3 className="font-semibold text-foreground">Availability</h3>
+      <FilterSection title="Availability" defaultOpen={false}>
         <div className="space-y-2">
           <div className="flex items-center space-x-2">
             <Checkbox
@@ -146,10 +306,11 @@ const Filters = ({
             </Label>
           </div>
         </div>
-      </div>
+      </FilterSection>
 
       {/* Reset All Button */}
       <Button variant="outline" className="w-full" onClick={onReset}>
+        <X className="size-4 mr-2" />
         Reset All Filters
       </Button>
     </div>
@@ -159,139 +320,17 @@ const Filters = ({
 // Main Category Page Component
 const CategoryPage = ({
   categoryData = {
-
     bannerImage: "/web-banner03.jpg",
     description: "Explore our wide range of electronic products",
   },
-  products = [
-
-    {
-      id: 1,
-      name: "Royal Silk Lehenga",
-      description: "Heavy Embroidered",
-      category: "Bridal Collection",
-      price: 15999,
-      originalPrice: 24999,
-      rating: 4.8,
-      reviews: 234,
-      image:
-        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500",
-      images: [
-        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500",
-        "https://images.unsplash.com/photo-1583391733956-6c78276477e5?w=500",
-      ],
-      badge: "BEST SELLER",
-      stock: 5,
-      inStock: true,
-    },
-    {
-      id: 2,
-      name: "Designer Lehenga Set",
-      description: "Mirror Work",
-      category: "Wedding Special",
-      price: 12499,
-      originalPrice: 18999,
-      rating: 4.9,
-      reviews: 456,
-      image: "/suits.webp",
-      badge: "TOP RATED",
-      stock: 3,
-      inStock: true,
-    },
-    {
-      id: 3,
-      name: "Embellished Lehenga",
-      description: "Stone Work",
-      category: "Festive Wear",
-      price: 9999,
-      originalPrice: 14999,
-      rating: 4.7,
-      reviews: 189,
-      image:
-        "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500",
-      badge: "NEW",
-      stock: 8,
-      inStock: true,
-    },
-    {
-      id: 4,
-      name: "Traditional Lehenga",
-      description: "Zari Work",
-      category: "Classic Collection",
-      price: 11999,
-      originalPrice: 16999,
-      rating: 4.6,
-      reviews: 167,
-      image:
-        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500",
-      badge: "SALE",
-      stock: 6,
-      inStock: true,
-    },
-    {
-      id: 5,
-      name: "Silk Saree Premium",
-      description: "Pure Banarasi",
-      category: "Silk Collection",
-      price: 7999,
-      originalPrice: 12999,
-      rating: 4.9,
-      reviews: 567,
-      image:
-        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500",
-      badge: "TOP RATED",
-      stock: 4,
-      inStock: true,
-    },
-    {
-      id: 6,
-      name: "Designer Saree",
-      description: "Printed Georgette",
-      category: "Modern Fusion",
-      price: 3999,
-      originalPrice: 6999,
-      rating: 4.7,
-      reviews: 234,
-      image: "/silk saree.webp",
-      badge: "BEST SELLER",
-      stock: 12,
-      inStock: true,
-    },
-    {
-      id: 7,
-      name: "Embroidered Saree",
-      description: "Heavy Border",
-      category: "Wedding Collection",
-      price: 5999,
-      originalPrice: 8999,
-      rating: 4.8,
-      reviews: 345,
-      image:
-        "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500",
-      badge: "NEW",
-      stock: 7,
-      inStock: true,
-    },
-    {
-      id: 8,
-      name: "Cotton Silk Saree",
-      description: "Lightweight",
-      category: "Casual Wear",
-      price: 2999,
-      originalPrice: 4999,
-      rating: 4.5,
-      reviews: 123,
-      image:
-        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500",
-      badge: "SALE",
-      stock: 15,
-      inStock: true,
-    },
-  ],
+ products=sampleProducts
 }) => {
   const [sortBy, setSortBy] = useState("featured");
-  const [priceRange, setPriceRange] = useState([0, 50000]);
+  const [priceRange, setPriceRange] = useState([200, 10000]);
   const [filters, setFilters] = useState({
+    colors: [],
+    fabrics: [],
+    occasions: [],
     discount: [],
     availability: {
       inStock: false,
@@ -303,8 +342,11 @@ const CategoryPage = ({
   const productsPerPage = 12;
 
   const handleResetFilters = () => {
-    setPriceRange([0, 50000]);
+    setPriceRange([200, 10000]);
     setFilters({
+      colors: [],
+      fabrics: [],
+      occasions: [],
       discount: [],
       availability: {
         inStock: false,
@@ -315,6 +357,9 @@ const CategoryPage = ({
   };
 
   const activeFiltersCount =
+    filters.colors.length +
+    filters.fabrics.length +
+    filters.occasions.length +
     filters.discount.length +
     (filters.availability.inStock ? 1 : 0) +
     (filters.availability.outOfStock ? 1 : 0);
@@ -327,16 +372,31 @@ const CategoryPage = ({
     if (product.price < priceRange[0] || product.price > priceRange[1])
       return false;
 
+    // Color Filter
+    if (filters.colors.length > 0 && !filters.colors.includes(product.color))
+      return false;
+
+    // Fabric Filter
+    if (filters.fabrics.length > 0 && !filters.fabrics.includes(product.fabric))
+      return false;
+
+    // Occasion Filter
+    if (
+      filters.occasions.length > 0 &&
+      !filters.occasions.includes(product.occasion)
+    )
+      return false;
+
     // Discount
     if (filters.discount.length > 0) {
       const discountPercent = product.originalPrice
         ? Math.round(
             ((product.originalPrice - product.price) / product.originalPrice) *
-              100,
+              100
           )
         : 0;
       const matchesDiscount = filters.discount.some(
-        (d) => discountPercent >= parseInt(d),
+        (d) => discountPercent >= parseInt(d)
       );
       if (!matchesDiscount) return false;
     }
@@ -416,10 +476,11 @@ const CategoryPage = ({
 
     return pages;
   };
-  const { slug } = useParams()
-  const [searchParams] = useSearchParams()
 
-  const categoryName = searchParams.get('name')
+  const { slug } = useParams();
+  const [searchParams] = useSearchParams();
+  const categoryName = searchParams.get("name");
+
   // ------------------------------
   return (
     <div className="min-h-screen bg-background">
@@ -431,10 +492,10 @@ const CategoryPage = ({
             alt={categoryData.name}
             className="w-full h-full object-cover"
           />
-          
+
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-12">
             <div className="max-w-7xl mx-auto">
-              <h1 className="text-4xl text-white md:text-5xl lg:text-6xl font-bold  mb-3 drop-shadow-2xl">
+              <h1 className="text-4xl text-white md:text-5xl lg:text-6xl font-bold mb-3 drop-shadow-2xl">
                 {categoryName}
               </h1>
               {categoryData.description && (
@@ -498,7 +559,7 @@ const CategoryPage = ({
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="w-75 sm:w-87.5 overflow-y-auto"
+                className="w-[90vw] p-2 sm:w-87.5 overflow-y-auto"
               >
                 <SheetHeader>
                   <SheetTitle>Filters</SheetTitle>
@@ -528,7 +589,9 @@ const CategoryPage = ({
                 <SelectContent>
                   <SelectItem value="featured">Featured</SelectItem>
                   <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
+                  <SelectItem value="price-high">
+                    Price: High to Low
+                  </SelectItem>
                   <SelectItem value="newest">Newest First</SelectItem>
                   <SelectItem value="popular">Most Popular</SelectItem>
                   <SelectItem value="rating">Top Rated</SelectItem>
@@ -541,8 +604,8 @@ const CategoryPage = ({
         {/* Filters & Products Grid */}
         <div className="flex gap-8">
           {/* Desktop Filters Sidebar */}
-          <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-6 bg-card rounded-xl border border-border p-6">
+          <aside className="hidden lg:block w-72 shrink-0">
+            <div className="sticky top-6 bg-card rounded-xl border border-border p-6 max-h-[calc(100vh-8rem)] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold flex items-center gap-2">
                   <Filter className="size-5" />
@@ -564,12 +627,19 @@ const CategoryPage = ({
             {currentProducts.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-lg text-muted-foreground">
-                  No products found
+                  No products found matching your filters
                 </p>
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={handleResetFilters}
+                >
+                  Clear All Filters
+                </Button>
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                   {currentProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -608,7 +678,7 @@ const CategoryPage = ({
                         >
                           {page}
                         </Button>
-                      ),
+                      )
                     )}
 
                     {/* Next Button */}

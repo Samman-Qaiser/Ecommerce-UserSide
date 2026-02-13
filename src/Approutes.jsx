@@ -24,11 +24,11 @@ const Approutes = () => {
     <Route path='/product/:id' element={<ProductPage />}/>
     <Route path='/allcategories' element={<AllCategories/>}/>
     <Route path="/category/:slug" element={<CategoryPage />} />
-    <Route path='thankyou' element={<ThankYou />}/>
+<Route path='/order-confirmation/:orderNumber' element={<ThankYou />}/>
     <Route path='/orders' element={<Orders />}/>
     <Route path='/checkout' element={<CheckoutPage />}/>
     <Route path='/contactus' element={<ContactUsPage />}/>
-    <Route path='/whishlist' element={<Whislist />}/>
+    <Route path='/wishlist' element={<Whislist />}/>
     <Route path='aboutus' element={<AboutPage />}/>
     <Route path='/login' element={<AuthPage />}/>
     <Route path='/privacypolicy' element={<PrivacyPolicy />}/>

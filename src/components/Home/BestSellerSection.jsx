@@ -69,7 +69,7 @@ const tabs = [
   const currentTabInfo = tabs.find(tab => tab.id === activeTab);
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
+    <section className="py-4 mt-0 lg:mt-7 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
         
         {/* --- Header & Tab Navigation --- */}

@@ -39,9 +39,9 @@ const ProductCard = ({ item, isWishlistPage = false }) => {
         {/* Wishlist/Delete Toggle */}
         <button 
           onClick={() => dispatch(toggleWishlist(item))}
-          className="absolute top-4 right-4 z-30 p-2.5 bg-white/10 backdrop-blur-md text-white hover:bg-white hover:text-red-500 transition-all"
+          className="absolute top-4 right-4 z-30 p-2.5  transition-all"
         >
-          {isWishlistPage ? <Trash2 className="w-4 h-4" /> : <Heart className="w-4 h-4" />}
+          {isWishlistPage ? <Heart fill='red' className="size-7  p-1 rounded-full text-red-600 bg-white hover:bg-red-600 hover:text-white transition-all duration-500" /> : <Heart className="size-7 p-1 rounded-full text-red-600 bg-white" />}
         </button>
       </div>
 

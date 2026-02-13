@@ -18,11 +18,11 @@ const categories = [
 
 const CategoriesSection = () => {
   return (
-    <section className="w-full py-12 bg-white overflow-hidden">
+    <section className="w-full py-6 mt-7 bg-white overflow-hidden">
       {/* Title / Brand Icon */}
       <div className="flex flex-col items-center justify-center mb-10 px-4">
 
-        <h2 className="text-2xl tracking-[0.4em] uppercase  font-light">Shop by Category</h2>
+        <h2 className="lg:text-2xl text-lg tracking-[0.4em] uppercase  font-light">Shop by Category</h2>
         <p className="text-gray-500 p-2 text-sm">India's most loved artisanal brand </p>
       </div>
 

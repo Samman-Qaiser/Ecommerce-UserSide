@@ -13,10 +13,13 @@ import { store } from "./redux/store";
 import { Toaster } from 'sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { queryClient } from "./services/queryclient";
+import { TbAuth2Fa } from "react-icons/tb";
+import AuthProvider from "./Auth/AuthProvider";
 function App() {
 
   return (
     <Provider store={store}>
+    <AuthProvider>
      <Toaster position="bottom-right" />
       <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools initialIsOpen={false} />
@@ -36,6 +39,7 @@ function App() {
           <Footer />
         </BrowserRouter>
       </QueryClientProvider>
+      </AuthProvider>
    </Provider>
   );
 }

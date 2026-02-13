@@ -2,24 +2,20 @@
 import React, { useState } from 'react';
 import { CheckCircle, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation,useParams } from 'react-router-dom';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { useSelector } from 'react-redux';
 import AccountCreationForm from '../Auth/AccountCreationForm';
 
 const ThankYouPage = () => {
+    
     const navigate = useNavigate();
     const location = useLocation();
-    
+      const { orderNumber } = useParams(); 
     // Get user from Redux store
-    const { isAuthenticated, user } = useSelector((state) => state.auth);
+    const { isAuthenticated, user ,isGuest} = useSelector((state) => state.auth);
     
-    // Get order data from navigation state (passed from checkout)
-    const orderData = location.state?.orderData || {
-        orderId: 'ORD-' + Date.now(),
-        customerName: 'Customer',
-        customerEmail: 'customer@example.com'
-    };
+  
 
     const [showAuthDialog, setShowAuthDialog] = useState(false);
 
@@ -27,7 +23,7 @@ const ThankYouPage = () => {
         if (isAuthenticated) {
             navigate('/orders');
         } else {
-            setShowAuthDialog(true);
+               navigate('/login');
         }
     };
 
@@ -54,7 +50,7 @@ const ThankYouPage = () => {
                 </h1>
 
                 <p className="text-slate-600 mb-6">
-                    Thank you for shopping with us, {orderData.customerName}!
+                    Thank you for shopping with us, {user?.fullName}!
                 </p>
 
                 {/* Order Details Card */}
@@ -66,15 +62,15 @@ const ThankYouPage = () => {
                         <Package className="w-5 h-5 text-[#732D92]" />
                     </div>
                     <p className="text-2xl font-bold text-[#732D92] mb-3">
-                        #{orderData.orderId}
+                        #{orderNumber}
                     </p>
-                    <p className="text-xs text-slate-500">
+                    {/* <p className="text-xs text-slate-500">
                         Confirmation sent to: <span className="font-medium">{orderData.customerEmail}</span>
-                    </p>
+                    </p> */}
                 </div>
 
                 {/* Benefits Section - Only show if NOT logged in */}
-                {!isAuthenticated && (
+                {isGuest && !isAuthenticated && (
                     <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
                         <p className="text-sm font-semibold text-amber-900 mb-2">
                             🎁 Create an account to unlock benefits!
@@ -91,7 +87,7 @@ const ThankYouPage = () => {
                 {isAuthenticated && user && (
                     <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                         <p className="text-sm font-semibold text-green-900">
-                            Welcome back, {user.name}! 👋
+                            Welcome back, {user?.name}! 👋
                         </p>
                         <p className="text-xs text-green-700 mt-1">
                             You can track this order in your order history.
@@ -123,16 +119,7 @@ const ThankYouPage = () => {
                 </p>
             </div>
 
-            {/* Auth Dialog */}
-            <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
-                <DialogContent className="max-w-125 p-0 overflow-hidden">
-                    <AccountCreationForm 
-                        orderId={orderData.orderId}
-                        orderData={orderData}
-                        onSuccess={handleAuthSuccess}
-                    />
-                </DialogContent>
-            </Dialog>
+       
         </div>
     );
 };

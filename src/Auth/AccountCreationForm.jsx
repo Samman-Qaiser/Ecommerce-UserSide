@@ -1,63 +1,43 @@
-// AccountCreationForm.jsx
 import React, { useState } from "react";
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useDispatch } from "react-redux";
-import { loginSuccess } from "../redux/authSlice";
+import { useAuth } from "../tanstackhooks/useAuth";
 
 const AccountCreationForm = ({ orderId, orderData, onSuccess }) => {
-  const dispatch = useDispatch();
+  const { signUp, signIn, loading, error, setError } = useAuth();
+
   const [isLogin, setIsLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
-    name:  "",
-    email:  "",
+    fullName: orderData?.customerName || "",
+    email: orderData?.customerEmail || "",
     password: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
+    setError(null);
 
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (isLogin) {
+        await signIn(formData.email, formData.password);
+      } else {
+        await signUp({
+          email: formData.email,
+          password: formData.password,
+          fullName: formData.fullName,
+        });
+      }
 
-      // Create user object
-      const userData = {
-        uid: "user_" + Date.now(), // Temporary ID, will be replaced with Firebase UID
-        name: formData.name,
-        email: formData.email,
-        createdAt: new Date().toISOString(),
-        orders: [orderId], // Link this order to user
-      };
-
-      // TODO: Firebase integration will go here
-      // const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      // userData.uid = userCredential.user.uid;
-
-      console.log("Form Data:", {
-        action: isLogin ? "login" : "signup",
-        ...formData,
-        orderId,
-      });
-
-      // Dispatch Redux action to save user in store
-      dispatch(loginSuccess(userData));
-
+      // Link order to user account
+      // This will be handled automatically in the auth hooks
 
       onSuccess();
     } catch (err) {
-      console.error("Auth error:", err);
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+      console.error("Account creation error:", err);
     }
   };
 
@@ -95,9 +75,9 @@ const AccountCreationForm = ({ orderId, orderData, onSuccess }) => {
               <div className="relative">
                 <User className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                 <Input
-                  value={formData.name}
+                  value={formData.fullName}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, fullName: e.target.value })
                   }
                   placeholder="Enter Your Name"
                   className="pl-10 h-11 border-slate-200 focus-visible:ring-0 focus:border-[#732D92] rounded-lg"
@@ -120,9 +100,8 @@ const AccountCreationForm = ({ orderId, orderData, onSuccess }) => {
                   setFormData({ ...formData, email: e.target.value })
                 }
                 placeholder="email@example.com"
-                className="pl-10 h-11 border-slate-200 focus-visible:ring-0  rounded-lg"
+                className="pl-10 h-11 border-slate-200 focus-visible:ring-0 rounded-lg"
                 required
-                // disabled={!isLogin && orderData?.customerEmail}
               />
             </div>
           </div>
@@ -140,7 +119,7 @@ const AccountCreationForm = ({ orderId, orderData, onSuccess }) => {
                   setFormData({ ...formData, password: e.target.value })
                 }
                 placeholder="••••••••"
-                className="pl-10 pr-10 h-11 border-slate-200 focus-visible:ring-0 ] rounded-lg"
+                className="pl-10 pr-10 h-11 border-slate-200 focus-visible:ring-0 rounded-lg"
                 required
                 minLength={6}
               />
@@ -162,7 +141,7 @@ const AccountCreationForm = ({ orderId, orderData, onSuccess }) => {
             type="submit"
             disabled={loading}
             className="w-full rounded-none h-11 text-white font-medium transition-all active:scale-[0.98]"
-
+            style={{ backgroundColor: "#732D92" }}
           >
             {loading
               ? "Please wait..."
@@ -180,7 +159,7 @@ const AccountCreationForm = ({ orderId, orderData, onSuccess }) => {
               type="button"
               onClick={() => {
                 setIsLogin(!isLogin);
-                setError("");
+                setError(null);
               }}
               className="ml-1.5 font-bold hover:underline"
               style={{ color: "#732D92" }}

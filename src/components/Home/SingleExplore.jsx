@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 
 const SingleExplore = () => {
   const images = [
-    "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1000",
+    "./handloom3.jpg",
     "./Handloom-Weavers.webp",
     "silk_sarees_in_India.webp",
-    "https://images.unsplash.com/photo-1610030468706-9a6dbad49b0a?w=600&auto=format&fit=crop&q=60",
+    "./handloom2.jpg",
   ];
 
   return (
@@ -22,11 +22,11 @@ const SingleExplore = () => {
         className="w-full lg:w-1/2 p-8 lg:p-20 flex flex-col justify-center items-center lg:items-start text-center lg:text-left order-2 lg:order-1"
       >
         <h1 className="text-4xl lg:text-4xl font-bold mb-4 leading-tight ">
-          Office Wear Saree
+        Handcrafted with Love
         </h1>
         
         <p className="text-gray-600 text-lg mb-8 tracking-wide italic font-light">
-          Dream Drapping within a minute
+       Discover the elegance of Indian hand-woven sarees, crafted with timeless artistry and intricate designs. Each saree reflects rich cultural heritage, blending tradition with contemporary style. Perfect for weddings, festivals, and special occasions.
         </p>
 
         <AnimatedButton 

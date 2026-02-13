@@ -10,6 +10,7 @@ import { addToCart } from '../../redux/cartSlice'; // Cart action import kiya
 import { toast } from 'sonner';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
+import { useNavigate } from "react-router-dom";
 
 export default function ProductCard({ product }) {
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
@@ -41,12 +42,16 @@ export default function ProductCard({ product }) {
     setTimeout(() => setIsAdded(false), 2000);
   };
 
-  const addToWishList = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dispatch(toggleWishlist(product));
-    toast.success(isFavorite ? 'Removed from wishlist' : 'Added to wishlist');
-  };
+const navigate = useNavigate();
+
+const addToWishList = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  dispatch(toggleWishlist(product));
+
+  showWishlistToast(product, isFavorite, navigate);
+};
 
   return (
     <>
@@ -137,3 +142,35 @@ export default function ProductCard({ product }) {
     </>
   );
 }
+const showWishlistToast = (product, isFavorite, navigate) => {
+  toast(
+    <div className="flex items-center gap-3">
+      <img
+        src={product.image}
+        alt={product.name}
+        className="h-12 w-12 rounded object-cover border"
+      />
+
+      <div className="flex-1">
+        <p className="text-sm font-semibold">
+          {isFavorite ? "Removed from Wishlist" : "Added to Wishlist"}
+        </p>
+        <p className="text-xs text-muted-foreground line-clamp-1">
+          {product.name}
+        </p>
+
+        {!isFavorite && (
+          <button
+            onClick={() => navigate("/wishlist")}
+            className="mt-1 text-xs font-medium text-black underline"
+          >
+            View Wishlist
+          </button>
+        )}
+      </div>
+    </div>,
+    {
+      duration: 3000,
+    }
+  );
+};

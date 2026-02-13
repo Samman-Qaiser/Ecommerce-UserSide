@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Package,
   Search,
   ChevronRight,
   ShoppingBag,
   ArrowLeft,
+  Loader2,
+  Eye,
 } from "lucide-react";
 import {
   Table,
@@ -18,9 +20,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import AnimatedButton from "../components/ui/AnimmatedButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useOrder } from "../tanstackhooks/useOrders";
+import { orderService } from "../services/ordersService";
+import { toast } from "sonner";
+import OrderTableSkeleton from "../components/ui/TableSekelton";
 
-// 1. Status Configuration (Keys should match exactly with data values)
+// Status Configuration
 const statusConfig = {
   pending: {
     label: "Pending",
@@ -60,41 +66,88 @@ const statusConfig = {
 };
 
 const Orders = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
-  // 2. Dummy Data (Keys matched with statusConfig)
-  const [orders] = useState([
-    {
-      id: "9921",
-      date: "02 Feb 2024",
-      orderStatus: "shipped",
-      total: "12,500",
-      items: "Banarasi Silk Saree",
-    },
-    {
-      id: "8842",
-      date: "28 Jan 2024",
-      orderStatus: "pending",
-      total: "8,900",
-      items: "Cotton Chikankari Suit",
-    },
-    {
-      id: "7710",
-      date: "15 Jan 2024",
-      orderStatus: "delivered",
-      total: "22,000",
-      items: "Designer Bridal Lehenga",
-    },
-  ]);
+  // ✅ For authenticated users - fetch orders
+  const { orders, isLoading, refetch } = useOrder();
 
+  // ✅ For guest tracking
   const [email, setEmail] = useState("");
   const [orderId, setOrderId] = useState("");
+  const [isTracking, setIsTracking] = useState(false);
 
-  const handleGuestOrderCheck = (e) => {
+  // Format date helper
+  const formatDate = (timestamp) => {
+    if (!timestamp) return "N/A";
+    
+    try {
+      // Handle Firestore Timestamp
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    } catch (error) {
+      return "N/A";
+    }
+  };
+// Orders.jsx mein yeh add karo useEffect mein
+useEffect(() => {
+  console.log("🔍 Debug Info:");
+  console.log("User:", user);
+  console.log("Is Authenticated:", isAuthenticated);
+  console.log("Orders:", orders);
+  console.log("Is Loading:", isLoading);
+}, [user, isAuthenticated, orders, isLoading]);
+  // ✅ Guest Order Tracking
+  const handleGuestOrderCheck = async (e) => {
     e.preventDefault();
-    console.log("Guest Order Check:", { email, orderId });
+    
+    if (!email || !orderId) {
+      toast.error("Please enter both email and order ID");
+      return;
+    }
+
+    setIsTracking(true);
+    
+    try {
+      console.log("🔍 Tracking order:", orderId);
+      
+      // Fetch order by order number
+      const order = await orderService.getOrderByNumber(orderId);
+
+      if (!order) {
+        toast.error("Order not found. Please check your Order ID.");
+        setIsTracking(false);
+        return;
+      }
+
+      // Verify email matches (case-insensitive)
+      // We need to get user email from userId
+      const { userService } = await import("../services/userService");
+      const orderUser = await userService.getUserById(order.userId);
+
+      if (!orderUser || orderUser.email.toLowerCase() !== email.toLowerCase()) {
+        toast.error("Email does not match this order");
+        setIsTracking(false);
+        return;
+      }
+
+      // ✅ Email matches - show order details
+      toast.success("Order found! Redirecting...");
+      navigate(`/order-confirmation/${orderId}`);
+
+    } catch (error) {
+      console.error("Error tracking order:", error);
+      toast.error("Failed to track order. Please try again.");
+    } finally {
+      setIsTracking(false);
+    }
   };
 
+  // Empty Orders Component
   const EmptyOrders = () => (
     <div className="flex flex-col items-center justify-center py-20 text-center">
       <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
@@ -102,7 +155,7 @@ const Orders = () => {
       </div>
       <h3 className="text-xl font-bold text-slate-900">No Orders Yet</h3>
       <p className="text-slate-500 mt-2 mb-8 max-w-70 mx-auto text-sm">
-        Looks like you haven't discovered our  collection yet.
+        Looks like you haven't discovered our collection yet.
       </p>
       <AnimatedButton
         to="/allcategories"
@@ -112,6 +165,7 @@ const Orders = () => {
     </div>
   );
 
+  // ✅ AUTHENTICATED USER VIEW
   if (isAuthenticated) {
     return (
       <div className="max-w-5xl mx-auto p-6 md:p-10 min-h-[70vh]">
@@ -134,7 +188,12 @@ const Orders = () => {
           </Link>
         </div>
 
-        {orders.length === 0 ? (
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+         <OrderTableSkeleton />
+          </div>
+        ) : orders.length === 0 ? (
           <EmptyOrders />
         ) : (
           <div className="border border-slate-100 rounded-2xl overflow-hidden bg-white shadow-sm shadow-slate-100/50">
@@ -142,7 +201,7 @@ const Orders = () => {
               <TableHeader className="bg-slate-50/50">
                 <TableRow className="border-slate-100 hover:bg-transparent">
                   <TableHead className="font-bold text-slate-900 py-5 pl-6">
-                    Order ID
+                    Order Number
                   </TableHead>
                   <TableHead className="font-bold text-slate-900">
                     Date
@@ -150,41 +209,57 @@ const Orders = () => {
                   <TableHead className="font-bold text-slate-900">
                     Status
                   </TableHead>
-                  <TableHead className="font-bold text-slate-900 text-right pr-6">
+                  <TableHead className="font-bold text-slate-900 text-right">
                     Total
+                  </TableHead>
+                  <TableHead className="font-bold text-slate-900 text-right pr-6">
+                    Action
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {orders.map((order) => (
                   <TableRow
-                    key={order.id}
-                    className="border-slate-50 hover:bg-slate-50/30 transition-colors cursor-pointer"
+                    key={order.orderNumber}
+                    className="border-slate-50 hover:bg-slate-50/30 transition-colors"
                   >
                     <TableCell className="font-medium py-5 pl-6">
-                      #ORD-{order.id}
+                      {order.orderNumber}
                     </TableCell>
                     <TableCell className="text-slate-500 text-sm">
-                      {order.date}
+                      {formatDate(order.createdAt)}
                     </TableCell>
                     <TableCell>
                       <span
                         className={`
                         inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase border
-                        ${statusConfig[order.orderStatus]?.bg || "bg-slate-50"} 
-                        ${statusConfig[order.orderStatus]?.text || "text-slate-600"} 
-                        ${statusConfig[order.orderStatus]?.border || "border-slate-100"}
+                        ${statusConfig[order.status]?.bg || "bg-slate-50"} 
+                        ${statusConfig[order.status]?.text || "text-slate-600"} 
+                        ${statusConfig[order.status]?.border || "border-slate-100"}
                       `}
                       >
                         <span
-                          className={`w-1.5 h-1.5 rounded-full mr-2 ${statusConfig[order.orderStatus]?.dot || "bg-slate-400"}`}
+                          className={`w-1.5 h-1.5 rounded-full mr-2 ${
+                            statusConfig[order.status]?.dot || "bg-slate-400"
+                          }`}
                         />
-                        {statusConfig[order.orderStatus]?.label ||
-                          order.orderStatus}
+                        {statusConfig[order.status]?.label || order.status}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right font-bold text-slate-900 pr-6">
-                      Rs. {order.total}
+                    <TableCell className="text-right font-bold text-slate-900">
+                      ₹{order.total.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-right pr-6">
+                      <Link to={`/order-confirmation/${order.orderNumber}`}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs font-bold hover:bg-slate-100"
+                        >
+                          <Eye className="w-3.5 h-3.5 mr-1" />
+                          View
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -196,6 +271,7 @@ const Orders = () => {
     );
   }
 
+  // ✅ GUEST USER VIEW (Order Tracking)
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-6 bg-[#fafafa]">
       <div className="w-full max-w-105 bg-white p-8 md:p-10 rounded-[24px] shadow-sm border border-slate-100">
@@ -207,7 +283,7 @@ const Orders = () => {
             Track Order
           </h1>
           <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-            Enter your details to see the current status of your shipment.
+            Enter your email and order number to see the current status of your shipment.
           </p>
         </div>
 
@@ -228,32 +304,47 @@ const Orders = () => {
 
           <div className="space-y-2">
             <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 ml-1">
-              Order ID
+              Order Number
             </label>
             <Input
               type="text"
-              placeholder="ORD-12345"
+              placeholder="ORD-1000"
               className="h-12 border-slate-200 focus-visible:ring-0 focus:border-black rounded-xl px-4 transition-all"
               value={orderId}
-              onChange={(e) => setOrderId(e.target.value)}
+              onChange={(e) => setOrderId(e.target.value.toUpperCase())}
               required
             />
+            <p className="text-xs text-slate-400 ml-1">
+              Example: ORD-1000 (found in your confirmation email)
+            </p>
           </div>
 
           <Button
             type="submit"
-            className="w-full h-12 bg-black hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg shadow-slate-200 transition-all active:scale-[0.98] mt-2"
+            disabled={isTracking}
+            className="w-full h-12 bg-black hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg shadow-slate-200 transition-all active:scale-[0.98] mt-2 disabled:opacity-50"
           >
-            Track My Package
-            <Search className="w-4 h-4 ml-2" />
+            {isTracking ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Tracking...
+              </>
+            ) : (
+              <>
+                Track My Package
+                <Search className="w-4 h-4 ml-2" />
+              </>
+            )}
           </Button>
         </form>
 
         <p className="mt-8 text-center text-[12px] text-slate-400">
           Need help?{" "}
-          <button className="underline font-semibold text-slate-900 hover:text-black transition-colors">
-            Contact Support
-          </button>
+          <Link to="/contactus">
+            <button className="underline font-semibold text-slate-900 hover:text-black transition-colors">
+              Contact Support
+            </button>
+          </Link>
         </p>
       </div>
     </div>
