@@ -7,7 +7,10 @@ import {
   query,
   where,
   orderBy,
+  limit,
+  startAfter,
 } from "firebase/firestore";
+
 export const productService = {
   getAll: async (options = {}) => {
     try {
@@ -49,7 +52,6 @@ export const productService = {
       const products = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        // Convert Firestore timestamps to ISO strings for JSON compatibility
         createdAt: doc.data().createdAt?.toDate().toISOString(),
         updatedAt: doc.data().updatedAt?.toDate().toISOString(),
       }));
@@ -85,13 +87,64 @@ export const productService = {
       throw error;
     }
   },
+
+  // ⭐ NEW: GET PRODUCTS BY SUBCATEGORY ID
+  getBySubCategoryId: async (subCategoryId, options = {}) => {
+    try {
+      const {
+        pageSize = 20,
+        lastDoc = null,
+        inStock = null,
+        sortBy = "createdAt",
+        sortOrder = "desc",
+      } = options;
+
+      console.log('🔍 Fetching products for subcategory:', subCategoryId);
+
+      const constraints = [
+        where("subCategoryId", "==", subCategoryId)
+      ];
+
+      if (inStock !== null) {
+        constraints.push(where("inStock", "==", inStock));
+      }
+
+      constraints.push(orderBy(sortBy, sortOrder));
+      constraints.push(limit(pageSize));
+
+      if (lastDoc) {
+        constraints.push(startAfter(lastDoc));
+      }
+
+      const q = query(collection(db, "products"), ...constraints);
+      const snapshot = await getDocs(q);
+
+      const products = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate().toISOString(),
+        updatedAt: doc.data().updatedAt?.toDate().toISOString(),
+      }));
+
+      console.log('✅ Products found:', products.length);
+
+      return {
+        products,
+        lastDoc: snapshot.docs[snapshot.docs.length - 1] || null,
+        hasMore: snapshot.docs.length === pageSize,
+      };
+    } catch (error) {
+      console.error("Failed to fetch products by subcategory:", error);
+      throw error;
+    }
+  },
+
   search: async (searchTerm) => {
     try {
       const q = query(collection(db, "products"), orderBy("name"), limit(20));
 
       const snapshot = await getDocs(q);
 
-      // Client-side filtering (Firestore doesn't support full-text search)
       const products = snapshot.docs
         .map((doc) => ({
           id: doc.id,

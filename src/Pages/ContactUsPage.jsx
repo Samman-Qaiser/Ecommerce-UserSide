@@ -95,7 +95,7 @@ const ContactUsPage = () => {
             <FaEnvelope className="text-primary mt-1" />
             <div>
               <p className="font-semibold text-gray-900">Email</p>
-              <p className="text-gray-600">support@example.com</p>
+              <p className="text-gray-600">doritaagekriti1@gmail.com</p>
             </div>
           </div>
 

@@ -1,3 +1,5 @@
+// data/useNavigationMenu.js
+import { useMemo } from 'react';
 import { useActiveCategories } from '../tanstackhooks/useCategories';
 import { useActiveSubCategories } from '../tanstackhooks/useSubCategories';
 
@@ -6,40 +8,77 @@ export const useNavigationMenu = () => {
   const { data: subCategories, isLoading: subLoading } = useActiveSubCategories();
 
   // Static items jo hamesha rahengy
-  const staticMenu = {
-    allCollections: { id: 5, label: 'All Collections', href: '/allcategories' },
-    contact: { id: 3, label: 'Contact Us', href: '/contactus' },
-    about: { id: 4, label: 'About Us', href: '/aboutus' },
-  };
+  const staticItems = [
+    { id: 'all-collections', label: 'All Collections', href: '/allcategories' },
+    { id: 'contact', label: 'Contact Us', href: '/contactus' },
+    { id: 'about', label: 'About Us', href: '/aboutus' },
+  ];
 
-  const dynamicTopMenu = categories?.map((cat) => {
-    const relatedSubCats = subCategories?.filter(sub => sub.categoryId === cat.id);
+  // Realistic placeholder menu - exactly what you want to show
+  const placeholderMenu = [
+    {
+      id: 'placeholder-1',
+      label: 'Sarees',
+      href: '#',
+      hasDropdown: true,
+      isPlaceholder: true,
+      items: [
+        { id: 'p1', label: 'Kora / Organza Silk', href: '#' },
+        { id: 'p2', label: 'Chiffon', href: '#' },
+        { id: 'p3', label: 'Matka Silk', href: '#' },
+        { id: 'p4', label: 'Banarsi Silk', href: '#' },
+        { id: 'p5', label: 'Katan Silk', href: '#' },
+        { id: 'p6', label: 'Chanderi', href: '#' },
+        { id: 'p7', label: 'Maheshwari', href: '#' },
+        { id: 'p8', label: 'Muslin', href: '#' },
+        { id: 'p9', label: 'Linen', href: '#' },
+        { id: 'p10', label: 'Cotton', href: '#' },
+      ]
+    },
+    {
+      id: 'placeholder-2',
+      label: 'Suits',
+      href: '#',
+      hasDropdown: false,
+      isPlaceholder: true
+    },
+  
+  ];
+
+  const menuData = useMemo(() => {
+    // Agar data nahi hai, placeholder menu show karo
+    if (!categories || !subCategories) {
+      return {
+        topMenu: [...placeholderMenu, ...staticItems]
+      };
+    }
+
+    // Real data ke saath dynamic menu
+    const dynamicTopMenu = categories.map((cat) => {
+      const relatedSubCats = subCategories.filter(
+        sub => sub.categoryId === cat.id
+      );
+
+      return {
+        id: cat.id,
+        label: cat.name,
+        href: `/category/${cat.slug}`,
+        hasDropdown: relatedSubCats.length > 0,
+        items: relatedSubCats.map(sub => ({
+          id: sub.id,
+          label: sub.name,
+          href: `/category/${sub.slug}`
+        }))
+      };
+    });
 
     return {
-      id: cat.id,
-      label: cat.name,
-      href: `/category/${cat.slug}`,
-      hasDropdown: relatedSubCats?.length > 0,
-      // Direct items array for simple dropdown
-      items: relatedSubCats?.map(sub => ({
-        label: sub.name,
-        href: `/category/${cat.slug}`
-      })) || []
+      topMenu: [...dynamicTopMenu, ...staticItems]
     };
-  }) || [];
-
-  // Sab ko combine kar ke final object banana
-  const menuData = {
-    topMenu: [
-      ...dynamicTopMenu,
-      staticMenu.allCollections,
-      staticMenu.contact,
-      staticMenu.about
-    ]
-  };
+  }, [categories, subCategories]);
 
   return { 
     menuData, 
-    isLoading: catLoading || subLoading 
+    isLoading: catLoading || subLoading,
   };
 };

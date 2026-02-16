@@ -1,3 +1,4 @@
+// components/Navbar.jsx
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -6,38 +7,34 @@ import {
   User,
   Menu,
   ChevronDown,
-  ChevronRight,
   Heart,
-  LogOut, // Added LogOut icon
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
 import { useNavigationMenu } from "../../data/useNavigationMenu";
 import { cn } from "@/lib/utils";
-
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator, // Added Separator for cleaner UI
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import TypingBanner from "../ui/TypingBanner";
 import CartSidebar from "../CartSidebar";
 import { useSelector } from "react-redux";
 import SearchOverlay from "../search/SearchOverlay";
-import { useAuth } from "../../tanstackhooks/useAuth"; // Make sure path is correct
+import { useAuth } from "../../tanstackhooks/useAuth";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   
   const { user, isAuthenticated, isGuest } = useSelector((state) => state.auth);
-  const { signOut } = useAuth(); // Auth hook se logout function liya
+  const { signOut } = useAuth();
   
   const itemCount = 0; 
   const { menuData, isLoading } = useNavigationMenu();
@@ -51,11 +48,10 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Logout Handler
   const handleLogout = async () => {
     try {
       await signOut();
-      navigate("/"); // Logout ke baad home par redirect
+      navigate("/");
     } catch (error) {
       console.error("Logout failed", error);
     }
@@ -87,39 +83,67 @@ export default function Navbar() {
               </Sheet>
 
               <Link to="/" className="flex items-center">
-                <img src="./logo.jpeg" className="w-30 h-20 hidden lg:inline" alt="Logo" />
+                <img src="/logo.jpeg" className="w-30 h-20 hidden lg:inline" alt="Logo" />
               </Link>
             </div>
 
             {/* Center Menu - Desktop Only */}
             <nav className="hidden lg:flex w-[80%] justify-center flex-wrap items-center space-x-6 xl:space-x-8">
-              {isLoading ? (
-                <div className="flex gap-4">
-                  {[1, 2, 3].map((i) => <div key={i} className="h-4 w-16 bg-gray-100 animate-pulse rounded" />)}
-                </div>
-              ) : (
-                menuData.topMenu.map((item) =>
-                  item.hasDropdown ? (
-                    <DropdownMenu key={item.id}>
-                      <DropdownMenuTrigger className={cn("text-sm flex items-center gap-1 py-6 outline-none", item.highlighted ? "text-red-600" : "text-gray-900")}>
-                        {item.label}
-                        <ChevronDown className="h-3 w-3" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="min-w-50">
-                        {item.items?.map((subItem, idx) => (
-                          <DropdownMenuItem key={idx} asChild>
-                            <Link to={subItem.href} className="cursor-pointer">{subItem.label}</Link>
+              {menuData.topMenu.map((item) => {
+                // Agar placeholder hai to click disable karo
+                const isClickable = !item.isPlaceholder;
+
+                return item.hasDropdown ? (
+                  <DropdownMenu key={item.id}>
+                    <DropdownMenuTrigger 
+                      disabled={!isClickable}
+                      className={cn(
+                        "text-sm flex items-center gap-1 py-6 outline-none",
+                        isClickable ? "text-gray-900 hover:text-gray-600" : "text-gray-900 cursor-default",
+                        item.highlighted && "text-red-600"
+                      )}
+                    >
+                      {item.label}
+                      <ChevronDown className="h-3 w-3" />
+                    </DropdownMenuTrigger>
+                    
+                    {isClickable && (
+                      <DropdownMenuContent align="start" className="min-w-[200px] max-h-[400px] overflow-y-auto">
+                        {item.items?.map((subItem) => (
+                          <DropdownMenuItem key={subItem.id} asChild>
+                            <Link 
+                              to={subItem.href} 
+                              className="cursor-pointer hover:bg-gray-50"
+                            >
+                              {subItem.label}
+                            </Link>
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>
-                    </DropdownMenu>
-                  ) : (
-                    <Link key={item.id} to={item.href} className={cn("text-sm py-6", item.highlighted ? "text-red-600" : "text-gray-900")}>
+                    )}
+                  </DropdownMenu>
+                ) : (
+                  isClickable ? (
+                    <Link 
+                      key={item.id} 
+                      to={item.href}
+                      className={cn(
+                        "text-sm py-6 hover:text-gray-600 transition-colors",
+                        item.highlighted ? "text-red-600" : "text-gray-900"
+                      )}
+                    >
                       {item.label}
                     </Link>
+                  ) : (
+                    <span
+                      key={item.id}
+                      className="text-sm py-6 text-gray-900 cursor-default"
+                    >
+                      {item.label}
+                    </span>
                   )
-                )
-              )}
+                );
+              })}
             </nav>
 
             {/* Right Icons */}
@@ -131,7 +155,7 @@ export default function Navbar() {
               <SearchOverlay open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
               <Link to="/wishlist">
-                <Heart className="cursor-pointer size-5" />
+                <Heart className="cursor-pointer size-5 hover:text-red-500 transition-colors" />
               </Link>
 
               <DropdownMenu>
@@ -151,7 +175,7 @@ export default function Navbar() {
                   ) : (
                     <DropdownMenuItem asChild>
                       <Link to="/login" className="w-full">
-                        <div className="bg-black text-white p-2 text-center rounded w-full font-medium">
+                        <div className="bg-black text-white p-2 text-center rounded w-full font-medium hover:bg-gray-800 transition-colors">
                           Login / Sign Up
                         </div>
                       </Link>
@@ -162,7 +186,6 @@ export default function Navbar() {
                     <Link to="/orders">My Orders</Link>
                   </DropdownMenuItem>
                   
-                  {/* LOGOUT BUTTON - Sirf tab dikhega jab user login ho aur guest na ho */}
                   {!isGuest && isAuthenticated && (
                     <>
                       <DropdownMenuSeparator />
@@ -178,17 +201,16 @@ export default function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-             <CartSidebar cartItems={[]}>
-  {/* Button ke andar Fragment (<> </>) nikal dein */}
-  <Button variant="ghost" size="icon" className="relative">
-    <ShoppingBag className="size-5" />
-    {itemCount > 0 && (
-      <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
-        {itemCount}
-      </Badge>
-    )}
-  </Button>
-</CartSidebar>
+              <CartSidebar cartItems={[]}>
+                <Button variant="ghost" size="icon" className="relative">
+                  <ShoppingBag className="size-5" />
+                  {itemCount > 0 && (
+                    <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                      {itemCount}
+                    </Badge>
+                  )}
+                </Button>
+              </CartSidebar>
             </div>
           </div>
         </div>
@@ -197,7 +219,7 @@ export default function Navbar() {
   );
 }
 
-// Mobile Menu with Logout
+// Mobile Menu
 function MobileMenu({ onClose }) {
   const [openMenu, setOpenMenu] = useState(null);
   const { menuData } = useNavigationMenu();
@@ -219,44 +241,75 @@ function MobileMenu({ onClose }) {
 
       <nav className="flex-1 overflow-y-auto p-6">
         <ul className="space-y-1">
-          {menuData.topMenu.map((item) => (
-            <li key={item.id}>
-              {item.hasDropdown ? (
-                <>
-                  <button
-                    onClick={() => setOpenMenu(openMenu === item.id ? null : item.id)}
-                    className={cn("flex items-center justify-between w-full py-3 text-sm font-medium", item.highlighted ? "text-red-600" : "text-gray-900")}
-                  >
-                    {item.label}
-                    <ChevronDown className={cn("h-4 w-4 transition-transform", openMenu === item.id && "rotate-180")} />
-                  </button>
-                  {openMenu === item.id && (
-                    <ul className="pl-4 mt-1 space-y-1 border-l-2">
-                      {item.items?.map((subItem, idx) => (
-                        <li key={idx}>
-                          <Link to={subItem.href} onClick={onClose} className="block py-2 text-sm text-gray-600 italic">
-                            {subItem.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </>
-              ) : (
-                <Link to={item.href} onClick={onClose} className={cn("block py-3 text-sm font-medium", item.highlighted ? "text-red-600" : "text-gray-900")}>
-                  {item.label}
-                </Link>
-              )}
-            </li>
-          ))}
+          {menuData.topMenu.map((item) => {
+            const isClickable = !item.isPlaceholder;
+
+            return (
+              <li key={item.id}>
+                {item.hasDropdown ? (
+                  <>
+                    <button
+                      onClick={() => isClickable && setOpenMenu(openMenu === item.id ? null : item.id)}
+                      disabled={!isClickable}
+                      className={cn(
+                        "flex items-center justify-between w-full py-3 text-sm font-medium",
+                        item.highlighted ? "text-red-600" : "text-gray-900"
+                      )}
+                    >
+                      {item.label}
+                      <ChevronDown 
+                        className={cn(
+                          "h-4 w-4 transition-transform",
+                          openMenu === item.id && "rotate-180"
+                        )} 
+                      />
+                    </button>
+                    {openMenu === item.id && isClickable && (
+                      <ul className="pl-4 mt-1 space-y-1 border-l-2 border-gray-200">
+                        {item.items?.map((subItem) => (
+                          <li key={subItem.id}>
+                            <Link 
+                              to={subItem.href} 
+                              onClick={onClose} 
+                              className="block py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                            >
+                              {subItem.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  isClickable ? (
+                    <Link 
+                      to={item.href} 
+                      onClick={onClose} 
+                      className={cn(
+                        "block py-3 text-sm font-medium",
+                        item.highlighted ? "text-red-600" : "text-gray-900"
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <span 
+                      className="block py-3 text-sm font-medium text-gray-900"
+                    >
+                      {item.label}
+                    </span>
+                  )
+                )}
+              </li>
+            );
+          })}
         </ul>
 
-        {/* Mobile Logout Option */}
         {!isGuest && isAuthenticated && (
           <div className="mt-8 pt-6 border-t">
             <button 
               onClick={handleLogout}
-              className="flex items-center gap-2 text-red-600 font-bold text-sm"
+              className="flex items-center gap-2 text-red-600 font-bold text-sm hover:text-red-700 transition-colors"
             >
               <LogOut className="size-4" />
               Logout Account

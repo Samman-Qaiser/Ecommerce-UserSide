@@ -56,7 +56,7 @@ const addToWishList = (e) => {
   return (
     <>
       <div
-        className="group rounded-md relative border-none shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer bg-transparent"
+        className="group rounded-md relative border-none  hover:shadow-lg transition-all duration-300 cursor-pointer bg-transparent"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -108,7 +108,7 @@ const addToWishList = (e) => {
             <p className="text-sm text-gray-600 mt-1 border border-gray-300 rounded px-2 py-0.5 inline-block">
             {product.category}
           </p>
-           <div className="mt-2 font-medium">₹ {product.price.toLocaleString('en-IN')}</div>
+           <div className="mt-2 text-sm">₹ {product.price.toLocaleString('en-IN')}</div>
         </div>
            {/* ADD TO CART ICON (TOP LEFT) */}
           <button
@@ -122,7 +122,7 @@ const addToWishList = (e) => {
             {isAdded ? (
               <Check className="h-4 w-4 animate-in zoom-in duration-300" />
             ) : (
-              <ShoppingBagIcon className="h-4 w-4"  />
+     <ShoppingBagIcon className="h-4 w-4"  />
             )}
           </button>
       </div>

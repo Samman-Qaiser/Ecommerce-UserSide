@@ -1,27 +1,72 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useActiveSubCategories } from '../tanstackhooks/useSubCategories';
+import { Loader2 } from 'lucide-react';
 
-const categories = [
-  { id: 1, name: "Ready To Wear", img: "./web-banner01.jpg", size: "large", slug: "ready-to-wear" },
-  { id: 2, name: "Silk Sarees", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb", size: "medium", slug: "silk" },
-  { id: 3, name: "Cotton Blend", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b", size: "medium", slug: "cotton" },
-  { id: 4, name: "Designer Blouse", img: "./silk saree.webp", size: "medium", slug: "blouse" },
-  { id: 5, name: "Lehengas", img: "./web-banner02.jpg", size: "large", slug: "lehenga" },
-  { id: 6, name: "Pre-Draped", img: "./Work-Sarees.jpg", size: "medium", slug: "pre-draped" },
-  { id: 7, name: "Wedding Edit", img: "./ready-to-wear.webp", size: "medium", slug: "wedding" },
-  { id: 8, name: "Kurtas", img: "./suits.webp", size: "medium", slug: "kurta" },
-  { id: 11, name: "Daily Wear", img: "./formal-wear.jfif", size: "large", slug: "daily" },
-  { id: 9, name: "wedding wear", img: "./fancy-saree.jfif", size: "large", slug: "men" },
-  { id: 10, name: "Accessories", img: "./festive-wear.jfif", size: "medium", slug: "accessories" },
-  { id: 12, name: "Luxury Collection", img: "./traditional-wear.jfif", size: "medium", slug: "luxury" },
+// Hardcoded fallback images agar backend se nahi aaye
+const fallbackImages = [
+  "./web-banner01.jpg",
+  "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb",
+  "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b",
+  "./silk saree.webp",
+  "./web-banner02.jpg",
+  "./Work-Sarees.jpg",
+  "./ready-to-wear.webp",
+  "./suits.webp",
+  "./formal-wear.jfif",
+  "./fancy-saree.jfif",
+  "./festive-wear.jfif",
+  "./traditional-wear.jfif",
+  "./web-banner01.jpg",
+  "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb",
+  "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b",
+  "./silk saree.webp",
 ];
 
+// Size pattern: large, medium, medium (repeat)
+const getSizePattern = (index) => {
+  const pattern = ['large', 'medium', 'medium'];
+  return pattern[index % 3];
+};
+
 const AllCategories = () => {
+  const { data: subCategories, isLoading, isError } = useActiveSubCategories();
+
+  console.log('Active SubCategories:', subCategories);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="bg-[#FDF8F1] min-h-screen py-16 px-4 lg:px-8 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-[#A07B50]" />
+      </div>
+    );
+  }
+
+  // Error state
+  if (isError || !subCategories?.length) {
+    return (
+      <div className="bg-[#FDF8F1] min-h-screen py-16 px-4 lg:px-8 flex items-center justify-center">
+        <p className="text-slate-500">Unable to load categories at this time.</p>
+      </div>
+    );
+  }
+
+  // Transform API data with fallback images and size pattern
+  const categories = subCategories.map((cat, index) => ({
+    id: cat.id,
+    name: cat.name,
+    // Agar backend se image hai to woh use karo, nahi to fallback
+    img: cat.image || cat.banner || fallbackImages[index % fallbackImages.length],
+    size: getSizePattern(index),
+    slug: cat.slug,
+  }));
+
   return (
     <div className="bg-[#FDF8F1] min-h-screen py-16 px-4 lg:px-8">
       {/* Title Section */}
-     <div className="max-w-7xl mx-auto text-center mb-16">
+      <div className="max-w-7xl mx-auto text-center mb-16">
         <motion.h4 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -33,7 +78,7 @@ const AllCategories = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-5xl lg:text-7xl  tracking-tighter"
+          className="text-5xl lg:text-7xl tracking-tighter"
         >
           Explore All Categories
         </motion.h1>
@@ -54,10 +99,10 @@ const AllCategories = () => {
               'col-span-1 row-span-1'
             }`}
           >
-         <Link 
-  to={`/category/${cat.slug}?name=${encodeURIComponent(cat.name)}`} 
-  className="w-full h-full block"
->
+            <Link 
+              to={`/category/${cat.slug}?name=${encodeURIComponent(cat.name)}`} 
+              className="w-full h-full block"
+            >
               {/* Image with subtle zoom on hover */}
               <img 
                 src={cat.img} 

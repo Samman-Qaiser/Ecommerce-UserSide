@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const messages = [
   "CASH ON DELIVERY AVAILABLE",
-  "FREE SHIPPING ON ORDERS ABOVE 1000 INR",
+  "FREE SHIPPING ON PREPAID ORDERS",
 ];
 
 const TypingBanner = () => {

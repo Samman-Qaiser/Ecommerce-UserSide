@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -31,7 +31,7 @@ const CheckoutPage = () => {
   // CALCULATIONS
   // ============================================
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
-  const codShippingFee = 99
+  const codShippingFee = 300
   const codAdvancePayment = 500
   
   const shippingFee = paymentMethod === 'cod' ? codShippingFee : 0;

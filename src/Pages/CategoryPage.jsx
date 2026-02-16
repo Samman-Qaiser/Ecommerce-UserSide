@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SlidersHorizontal,
   X,
@@ -7,6 +7,7 @@ import {
   ChevronRight,
   ChevronDown,
   ChevronUp,
+  Loader2,
 } from "lucide-react";
 import {
   Select,
@@ -30,7 +31,9 @@ import {
 import { useParams, useSearchParams } from "react-router-dom";
 import ProductCard from "../components/product/ProductCard";
 import { cn } from "@/lib/utils";
-import { sampleProducts } from "../data/sampleProducts";
+import { useSubCategoryBySlug } from "../tanstackhooks/useSubCategories";
+import { useProductsBySubCategory } from "../tanstackhooks/useProduct";
+import { ProductGridSkeleton } from "../components/product/ProductCardSekeleton";
 
 // Color options with actual colors
 const colorOptions = [
@@ -53,15 +56,15 @@ const colorOptions = [
 
 // Fabric options
 const fabricOptions = [
-  { name: "Cotton", value: "cotton", count: 6 },
-  { name: "Cotton Acrylic", value: "cotton-acrylic", count: 2 },
-  { name: "Linen Zari", value: "linen-zari", count: 1 },
-  { name: "Modal", value: "modal", count: 1 },
-  { name: "Mul Cotton", value: "mul-cotton", count: 19 },
-  { name: "Viscose Blend", value: "viscose-blend", count: 5 },
-  { name: "Silk", value: "silk", count: 8 },
-  { name: "Georgette", value: "georgette", count: 4 },
-  { name: "Chiffon", value: "chiffon", count: 3 },
+  { name: "Cotton", value: "cotton",},
+  { name: "Cotton Acrylic", value: "cotton-acrylic",  },
+  { name: "Linen Zari", value: "linen-zari",  },
+  { name: "Modal", value: "modal",  },
+  { name: "Mul Cotton", value: "mul-cotton",  },
+  { name: "Viscose Blend", value: "viscose-blend", },
+  { name: "Silk", value: "silk", },
+  { name: "Georgette", value: "georgette",  },
+  { name: "Chiffon", value: "chiffon", },
 ];
 
 // Occasion options
@@ -79,19 +82,19 @@ const FilterSection = ({ title, children, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-border pb-4">
+    <div className="border-b border-border ">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full py-2 text-left"
+        className="flex items-center justify-between w-full p-1  text-left"
       >
-        <h3 className="font-semibold text-foreground">{title}</h3>
+        <h3 className=" text-foreground">{title}</h3>
         {isOpen ? (
           <ChevronUp className="h-4 w-4 text-muted-foreground" />
         ) : (
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         )}
       </button>
-      {isOpen && <div className="mt-3">{children}</div>}
+      {isOpen && <div >{children}</div>}
     </div>
   );
 };
@@ -105,7 +108,7 @@ const Filters = ({
   onReset,
 }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Price Range Filter */}
       <FilterSection title="Price Range">
         <div className="space-y-4">
@@ -147,7 +150,7 @@ const Filters = ({
                 filters.colors.includes(color.value)
                   ? "border-primary ring-2 ring-primary ring-offset-2"
                   : "border-gray-300",
-                color.value === "white" && "border-gray-400"
+                color.value === "white" && "border-gray-400",
               )}
               style={{ backgroundColor: color.color }}
               title={color.name}
@@ -173,7 +176,9 @@ const Filters = ({
                   } else {
                     setFilters({
                       ...filters,
-                      fabrics: filters.fabrics.filter((f) => f !== fabric.value),
+                      fabrics: filters.fabrics.filter(
+                        (f) => f !== fabric.value,
+                      ),
                     });
                   }
                 }}
@@ -182,7 +187,7 @@ const Filters = ({
                 htmlFor={fabric.value}
                 className="text-sm font-normal cursor-pointer flex-1"
               >
-                {fabric.name} ({fabric.count})
+                {fabric.name} 
               </Label>
             </div>
           ))}
@@ -207,7 +212,7 @@ const Filters = ({
                     setFilters({
                       ...filters,
                       occasions: filters.occasions.filter(
-                        (o) => o !== occasion.value
+                        (o) => o !== occasion.value,
                       ),
                     });
                   }
@@ -318,13 +323,34 @@ const Filters = ({
 };
 
 // Main Category Page Component
-const CategoryPage = ({
-  categoryData = {
-    bannerImage: "/web-banner03.jpg",
-    description: "Explore our wide range of electronic products",
-  },
- products=sampleProducts
-}) => {
+const CategoryPage = () => {
+  const { slug } = useParams();
+  const [searchParams] = useSearchParams();
+  const categoryName = searchParams.get("name");
+
+  // ✅ Backend Integration
+  const {
+    data: subCategory,
+    isLoading: subCatLoading,
+    error: subCatError,
+  } = useSubCategoryBySlug(slug);
+
+const {
+  data: productsData,
+  isLoading: productsLoading,
+  error: productsError,
+} = useProductsBySubCategory(subCategory?.id, {
+  pageSize: 100,
+  inStock: null,
+  sortBy: "createdAt",
+  sortOrder: "desc",
+}, {
+  enabled: !!subCategory?.id,  // ✅ Only fetch when subcategory loaded
+  staleTime: 5 * 60 * 1000,    // ✅ Cache for 5 mins
+  gcTime: 10 * 60 * 1000,
+});
+
+  // State
   const [sortBy, setSortBy] = useState("featured");
   const [priceRange, setPriceRange] = useState([200, 10000]);
   const [filters, setFilters] = useState({
@@ -364,9 +390,10 @@ const CategoryPage = ({
     (filters.availability.inStock ? 1 : 0) +
     (filters.availability.outOfStock ? 1 : 0);
 
-  // ------------------------------
-  // Derived Products: Filter + Sort
-  // ------------------------------
+  // ✅ Get products array from backend response
+  const products = productsData?.products || [];
+
+  // Filter + Sort Logic
   const filteredProducts = products.filter((product) => {
     // Price
     if (product.price < priceRange[0] || product.price > priceRange[1])
@@ -392,11 +419,11 @@ const CategoryPage = ({
       const discountPercent = product.originalPrice
         ? Math.round(
             ((product.originalPrice - product.price) / product.originalPrice) *
-              100
+              100,
           )
         : 0;
       const matchesDiscount = filters.discount.some(
-        (d) => discountPercent >= parseInt(d)
+        (d) => discountPercent >= parseInt(d),
       );
       if (!matchesDiscount) return false;
     }
@@ -415,11 +442,11 @@ const CategoryPage = ({
       case "price-high":
         return b.price - a.price;
       case "rating":
-        return b.rating - a.rating;
+        return (b.rating || 0) - (a.rating || 0);
       case "newest":
-        return b.id - a.id;
+        return new Date(b.createdAt) - new Date(a.createdAt);
       case "popular":
-        return b.reviews - a.reviews;
+        return (b.reviews || 0) - (a.reviews || 0);
       default:
         return 0;
     }
@@ -432,7 +459,7 @@ const CategoryPage = ({
   const currentProducts = sortedProducts.slice(startIndex, endIndex);
 
   // Reset to page 1 when filters or sort changes
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [sortBy, priceRange, filters]);
 
@@ -477,36 +504,65 @@ const CategoryPage = ({
     return pages;
   };
 
-  const { slug } = useParams();
-  const [searchParams] = useSearchParams();
-  const categoryName = searchParams.get("name");
+  // ✅ Loading State
+ if (subCatLoading) {  // Sirf subcategory loading check karo
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+       <img
+          src={
+         
+            "/categorybanner.png"
+          }
 
-  // ------------------------------
+          className="w-full h-full object-cover object-top"
+        />
+    </div>
+  );
+}
+
+
+  // ✅ Error State
+  if (subCatError || !subCategory) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Category Not Found
+          </h2>
+          <p className="text-gray-600">
+            The category you're looking for doesn't exist.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Banner Image */}
-      {categoryData.bannerImage && (
-        <div className="relative w-full h-[60vh] xs:h-[40vh] sm:h-[45vh] md:h-[50vh] lg:h-[90vh] overflow-hidden">
-          <img
-            src={categoryData.bannerImage}
-            alt={categoryData.name}
-            className="w-full h-full object-cover"
-          />
-
-          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-12">
-            <div className="max-w-7xl mx-auto">
-              <h1 className="text-4xl text-white md:text-5xl lg:text-6xl font-bold mb-3 drop-shadow-2xl">
-                {categoryName}
-              </h1>
-              {categoryData.description && (
-                <p className="text-lg md:text-xl text-white/90 max-w-2xl drop-shadow-lg">
-                  {categoryData.description}
-                </p>
-              )}
-            </div>
+      {/* ✅ Banner Image from Backend */}
+      <div className="relative w-full h-[60vh] xs:h-[40vh] sm:h-[45vh] md:h-[50vh] lg:h-[90vh] overflow-hidden">
+        <img
+          src={
+             subCategory.banner||subCategory.image||
+            "/categorybanner.png"
+          }
+          alt={subCategory.name}
+          className="w-full h-full object-cover object-top"
+        />
+         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30"></div>
+        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-12">
+          <div className="max-w-7xl mx-auto">
+            <h1 className="text-4xl text-white md:text-5xl lg:text-6xl font-bold mb-3 drop-shadow-2xl">
+              {subCategory.name}
+            </h1>
+            {subCategory.description && (
+              <p className="text-lg text-white md:text-xl  max-w-2xl drop-shadow-lg">
+                {subCategory.description}
+              </p>
+            )}
           </div>
         </div>
-      )}
+      </div>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -589,9 +645,7 @@ const CategoryPage = ({
                 <SelectContent>
                   <SelectItem value="featured">Featured</SelectItem>
                   <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">
-                    Price: High to Low
-                  </SelectItem>
+                  <SelectItem value="price-high">Price: High to Low</SelectItem>
                   <SelectItem value="newest">Newest First</SelectItem>
                   <SelectItem value="popular">Most Popular</SelectItem>
                   <SelectItem value="rating">Top Rated</SelectItem>
@@ -624,7 +678,19 @@ const CategoryPage = ({
 
           {/* Products Grid */}
           <div className="flex-1">
-            {currentProducts.length === 0 ? (
+           {productsLoading ? (
+    // ✅ Skeleton while loading
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+      {[...Array(12)].map((_, i) => (
+        <div key={i} className="animate-pulse">
+          <div className="aspect-3/4 bg-gray-200 rounded-lg mb-3"></div>
+          <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        </div>
+      ))}
+    </div>
+  ):
+            currentProducts.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-lg text-muted-foreground">
                   No products found matching your filters
@@ -678,7 +744,7 @@ const CategoryPage = ({
                         >
                           {page}
                         </Button>
-                      )
+                      ),
                     )}
 
                     {/* Next Button */}

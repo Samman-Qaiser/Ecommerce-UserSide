@@ -1,54 +1,106 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import AnimatedButton from "../ui/AnimmatedButton";
 
 const ImageTextSection = () => {
-  return (
-    <div className="w-full bg-[#FDF8F1] py-16 lg:py-24 space-y-24 overflow-hidden">
-      
-  
+  // Soft parallax effect for the background shape
+  const { scrollYProgress } = useScroll();
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
-      {/* SECTION 2: Eco-friendly Fabric (Arch Design Style) */}
-      <section className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-20">
+  return (
+    <div className="w-full bg-[#FCF9F5] py-20 lg:py-32 overflow-hidden relative">
+      {/* Background Decorative Element */}
+      <motion.div 
+        style={{ y: y1 }}
+        className="absolute top-20 right-[-10%] w-[400px] h-[400px] rounded-full bg-[#A07B50]/5 blur-3xl"
+      />
+
+      <section className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row-reverse items-center gap-16 lg:gap-24 relative z-10">
+        
         {/* Right: Text Content */}
         <motion.div 
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: 40 }}
           whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="w-full lg:w-1/2 text-center lg:text-left space-y-6"
+          viewport={{ once: true }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full lg:w-1/2 space-y-8"
         >
-          <h2 className="text-4xl lg:text-5xl font-bold  leading-snug">
-            Cosy & comfortable <br /> fabric
-          </h2>
-          <p className="text-gray-600 text-base lg:text-lg leading-relaxed font-light">
-            You're lounging at home or heading out for a casual day, our eco-friendly 
-            fabrics ensure you stay comfortable and chic. Embrace the perfect fusion 
-            of fashion and ease.
-          </p>
-          <div className="flex justify-center  lg:justify-start">
-            <AnimatedButton label="View More" className="bg-[#A07B50]  text-center " to='/allcategories' />
+          <div className="space-y-4">
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="text-[#A07B50] uppercase tracking-[0.2em] text-xs font-semibold block"
+            >
+              Premium Collection
+            </motion.span>
+            
+            <h2 className="text-5xl lg:text-7xl font-serif text-[#2D2D2D] leading-[1.1] italic">
+              Cosy <span className="font-sans not-italic font-light text-gray-400">&</span> <br /> 
+              <span className="relative">
+                Comfortable
+                <svg className="absolute -bottom-2 left-0 w-full h-2 text-[#A07B50]/20" viewBox="0 0 100 10" preserveAspectRatio="none">
+                  <path d="M0 5 Q 25 0 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="2" />
+                </svg>
+              </span>
+            </h2>
           </div>
-        </motion.div>
 
-        {/* Left: Arch Image (Inspired by Image 3) */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          className="relative w-full lg:w-1/2 flex justify-center"
-        >
-          {/* Subtle Arch Border behind image */}
-          <div className="absolute -inset-4 border border-[#A07B50]/20 rounded-t-full hidden lg:block" />
-          
-          <div className="w-75 h-112.5 lg:w-100 lg:h-137.5 rounded-t-full overflow-hidden border-12 border-white shadow-2xl">
-            <img 
-              src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800" 
-              className="w-full h-full object-cover" 
-              alt="Comfortable Wear" 
+          <p className="text-gray-500 text-lg lg:text-xl leading-relaxed font-light max-w-lg">
+            Whether you're lounging at home or stepping out, our eco-conscious 
+            fabrics redefine the boundary between <span className="text-[#A07B50] font-medium">luxury and ease.</span>
+          </p>
+
+          <div className="pt-4">
+            <AnimatedButton 
+              label="Explore Collection" 
+              className="px-10 py-4 bg-[#2D2D2D]  hover:bg-[#A07B50] transition-colors duration-500  shadow-lg" 
+              to='/allcategories' 
             />
           </div>
         </motion.div>
-      </section>
 
+        {/* Left: Enhanced Arch Image Section */}
+        <div className="relative w-full lg:w-1/2 group">
+          
+          {/* Decorative Floating Card */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="absolute -bottom-10 -right-4 lg:-right-10 bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-xl z-20 hidden sm:block border border-white/50"
+          >
+            <p className="text-[#A07B50] font-serif italic text-2xl">100%</p>
+            <p className="text-[10px] uppercase tracking-widest text-gray-500">Organic Cotton</p>
+          </motion.div>
+
+          {/* Main Image Container */}
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="relative"
+          >
+            {/* The Outer Arch Border */}
+            <div className="absolute -inset-6 border-[1px] border-[#A07B50]/30 rounded-t-[200px] translate-y-4 group-hover:translate-y-2 transition-transform duration-700" />
+            
+            {/* The Image Wrapper */}
+            <div className="relative aspect-[4/5] w-full max-w-[450px] mx-auto rounded-t-[250px] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border-[8px] border-white">
+              <motion.img 
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.8 }}
+                src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800" 
+                className="w-full h-full object-cover" 
+                alt="Luxury Wear" 
+              />
+              
+              {/* Subtle Overlay Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-40" />
+            </div>
+          </motion.div>
+        </div>
+
+      </section>
     </div>
   );
 };

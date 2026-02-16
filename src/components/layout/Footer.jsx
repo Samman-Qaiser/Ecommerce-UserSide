@@ -40,7 +40,7 @@ const socials = [
         {/* Column 1: Brand & Socials */}
         <div className="space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left">
           <div className="space-y-2 ">
-            <img src='./logo-trans.png' className="w-30 h-24 m-auto lg:m-0"/>
+            <img src='/logo-trans.png' className="w-30 h-24 m-auto lg:m-0"/>
             <p className="text-sm font-light leading-relaxed max-w-62.5">
               Discover timeless elegance and contemporary style at Doritaga.
             </p>
@@ -48,15 +48,15 @@ const socials = [
           
          <div className="flex gap-3">
   {socials.map(({ icon: Icon, url }, idx) => (
-    <a
+    <Link
       key={idx}
-      href={url}
+      to={url}
       target="_blank"
       rel="noopener noreferrer"
       className="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center hover:bg-[#FDF8F1]/80 transition-colors shadow-lg"
     >
       <Icon size={18} />
-    </a>
+    </Link>
   ))}
 </div>
         </div>
@@ -93,8 +93,8 @@ Haryana, 122015</p>
             <div className="flex items-center gap-3 border-t border-[#FDF8F1]/10 pt-4">
               <FaPhoneAlt className="shrink-0" />
               <div className="flex flex-col">
-                <span className="text-[10px] uppercase opacity-60 tracking-widest">International</span>
-                <a href="tel:+123456789" className="hover:underline">+123456789</a>
+                <span className="text-[10px] uppercase opacity-60 tracking-widest">Call Us</span>
+                <a href="tel:+123456789" className="hover:underline">+92 7830125984</a>
               </div>
             </div>
           </div>

@@ -7,12 +7,13 @@ import { motion } from 'framer-motion';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { User2 } from 'lucide-react';
 
 const testimonials = [
-  { id: 1, name: "Ananya Sharma", role: "Bride", content: "The Banarasi silk quality is unmatched. It felt like wearing a piece of art.", image: "https://i.pravatar.cc/150?u=1", rating: 5 },
-  { id: 2, name: "Priya Patel", role: "Blogger", content: "Minimalist design and premium fabric. The drape of their organza is just perfect.", image: "https://i.pravatar.cc/150?u=2", rating: 5 },
+  { id: 1, name: "Ananya Sharma", role: "Bride", content: "The Banarasi silk quality is unmatched. It felt like wearing a piece of art.", image: "", rating: 5 },
+  { id: 2, name: "Priya Patel", role: "Blogger", content: "Minimalist design and premium fabric. The drape of their organza is just perfect.", image: "", rating: 5 },
   { id: 3, name: "Sneha Reddy", role: "Customer", content: "Fast delivery and the colors are exactly as shown in the pictures. Highly recommended!", image: "https://i.pravatar.cc/150?u=3", rating: 4 },
-  { id: 4, name: "Meera Das", role: "Verified Buyer", content: "I bought a Kanjeevaram for my mom, and she absolutely loved the zari work.", image: "https://i.pravatar.cc/150?u=4", rating: 5 },
+  { id: 4, name: "Meera Das", role: "Verified Buyer", content: "I bought a Kanjeevaram for my mom, and she absolutely loved the zari work.", image: "", rating: 5 },
 ];
 
 const TestimonialSection = () => {
@@ -65,11 +66,12 @@ const TestimonialSection = () => {
                 </p>
 
                 <div className="flex items-center gap-4 pt-6 border-t border-gray-50">
-                  <img 
+                {item.image ? ( <img 
                     src={item.image} 
                     alt={item.name} 
                     className="w-14 h-14 rounded-full object-cover ring-4 ring-[#faf9f6]"
-                  />
+                  />) :(<User2 className='w-14 h-14 rounded-full object-cover ring-1 font-extralight ring-gray-400' />)}
+                 
                   <div>
                     <h4 className="font-bold text-slate-900 leading-tight">{item.name}</h4>
                     <p className="text-gray-400 text-[11px] uppercase tracking-wider mt-1">{item.role}</p>

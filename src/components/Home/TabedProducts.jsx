@@ -4,28 +4,28 @@ import ProductCard from '../product/ProductCard';
 import AnimatedButton from '../ui/AnimmatedButton';
 import { motion, AnimatePresence } from 'framer-motion';
 const TabbedProducts = () => {
-  const [activeTab, setActiveTab] = useState('festive-lehenga');
+  const [activeTab, setActiveTab] = useState('maheshwari');
 
   // Tabs configuration
   const tabs = [
     {
-      id: 'festive-lehenga',
-      slug: 'festive-lehenga',
-      label: 'Festive Lehenga',
+      id: 'maheshwari',
+      slug: 'maheshwari',
+      label: 'Maheshwari',
       icon: '👗',
       description: 'Elegant & Traditional'
     },
     {
-      id: 'festive-saree',
-      slug: 'festive-saree',
-      label: 'Festive Saree',
+      id: 'Chanderi',
+      slug: 'chanderi',
+      label: 'Chanderi',
       icon: '🪷',
       description: 'Grace & Beauty'
     },
     {
-      id: 'ready-to-wear',
-      slug: 'ready-to-wear',
-      label: 'Ready to Wear',
+      id: 'Linen',
+      slug: 'Linen',
+      label: 'Linen',
       icon: '✨',
       description: 'Comfort & Style'
     }
@@ -33,7 +33,7 @@ const TabbedProducts = () => {
 
   // Dummy products data for each tab (Firebase se replace hoga)
   const productsData = {
-    'festive-lehenga': [
+    'maheshwari': [
       {
         id: 1,
         name: 'Royal Silk Lehenga',
@@ -219,9 +219,9 @@ const TabbedProducts = () => {
 
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-12">
-          <div className="inline-flex items-center gap-2 bg-linear-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full mb-4">
-            <Sparkles className="w-4 h-4 text-purple-600" />
-            <span className="text-sm font-semibold text-purple-900">Curated Collections</span>
+          <div className="inline-flex items-center gap-2 bg-[#F5E6D3] px-4 py-2 rounded-full mb-4">
+            <Sparkles className="w-4 h-4 text-[#A07B50]" />
+            <span className="text-sm font-semibold text-[#A07B50]">Curated Collections</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
