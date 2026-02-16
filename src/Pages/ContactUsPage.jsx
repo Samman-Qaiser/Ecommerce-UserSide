@@ -87,7 +87,7 @@ const ContactUsPage = () => {
             <FaPhoneAlt className="text-primary mt-1" />
             <div>
               <p className="font-semibold text-gray-900">Phone</p>
-              <p className="text-gray-600">+1 234 567 890</p>
+              <p className="text-gray-600">+91 7830125984</p>
             </div>
           </div>
 

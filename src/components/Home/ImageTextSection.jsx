@@ -82,20 +82,20 @@ const ImageTextSection = () => {
             className="relative"
           >
             {/* The Outer Arch Border */}
-            <div className="absolute -inset-6 border-[1px] border-[#A07B50]/30 rounded-t-[200px] translate-y-4 group-hover:translate-y-2 transition-transform duration-700" />
+            <div className="absolute -inset-6 border-[1px] border-[#A07B50]/30 rounded-t-full translate-y-4 group-hover:translate-y-2 transition-transform duration-700" />
             
             {/* The Image Wrapper */}
-            <div className="relative aspect-[4/5] w-full max-w-[450px] mx-auto rounded-t-[250px] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border-[8px] border-white">
+            <div className="relative aspect-3/5 w-full max-w-[450px] mx-auto rounded-t-full overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border-[8px] border-white">
               <motion.img 
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.8 }}
-                src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800" 
+                src="/katan.jfif" 
                 className="w-full h-full object-cover" 
                 alt="Luxury Wear" 
               />
               
               {/* Subtle Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-40" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-40" />
             </div>
           </motion.div>
         </div>

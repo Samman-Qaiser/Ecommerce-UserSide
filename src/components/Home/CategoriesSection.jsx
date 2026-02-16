@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const categories = [
-  { name: "Suits", img: "suits.jfif", slug: "suits" },
-  { name: "Raw Silk", img: "raw silk.jfif", slug: 'blouse' },
+  { name: "Suits", img: "/suits.jfif", slug: "suits" },
+  { name: "Raw Silk", img: "raw silk.jfif", slug: 'raw-silk' },
   {
-    name: "Tussar", img: "./tusar silk.jfif",
+    name: "Tussar", img: "/tusar silk.jfif",
     slug: 'tussar'
   },
-  { name: "Office Wear", img: "./office wear.jfif", slug: "office-wear" },
-  { name: "Tissue", img: "./tissue.jfif", slug: 'tissue' },
+  { name: "Office Wear", img: "/office wear.jfif", slug: "office-wear" },
+  { name: "Tissue", img: "/tissue.jfif", slug: 'tissue' },
 
 ];
 
@@ -25,8 +25,8 @@ const CategoriesSection = () => {
       </div>
 
       {/* Main Container - Desktop: Grid | Mobile: Horizontal Scroll */}
-      <div className="relative px-4 lg:px-10">
-        <div className="flex lg:grid lg:grid-cols-5 gap-6 lg:gap-4 overflow-x-auto no-scrollbar pb-4 lg:pb-0 snap-x snap-mandatory">
+      <div className="relative    lg:px-10">
+        <div className="flex lg:grid px-4 py-1 lg:grid-cols-5 gap-6 lg:gap-4 overflow-x-auto no-scrollbar pb-4 lg:pb-0 snap-x snap-mandatory box-border">
           {categories.map((cat, index) => (
             <motion.div
               key={index}
@@ -34,7 +34,7 @@ const CategoriesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               whileHover={{ y: -5 }}
-              className="shrink-0 w-24 lg:w-full snap-center"
+              className="shrink-0  w-24 lg:w-full snap-center"
             >
               <Link
                 to={`/category/${cat.slug}?name=${encodeURIComponent(cat.name)}`}

@@ -14,7 +14,7 @@ export const useNavigationMenu = () => {
     { id: 'about', label: 'About Us', href: '/aboutus' },
   ];
 
-  // Realistic placeholder menu - exactly what you want to show
+  // Realistic placeholder menu
   const placeholderMenu = [
     {
       id: 'placeholder-1',
@@ -42,7 +42,6 @@ export const useNavigationMenu = () => {
       hasDropdown: false,
       isPlaceholder: true
     },
-  
   ];
 
   const menuData = useMemo(() => {
@@ -59,11 +58,33 @@ export const useNavigationMenu = () => {
         sub => sub.categoryId === cat.id
       );
 
+      // ✅ KEY CHANGE: Agar sirf 1 subcategory hai
+      if (relatedSubCats.length === 1) {
+        // Direct subcategory show karo (no dropdown)
+        return {
+          id: relatedSubCats[0].id,
+          label: relatedSubCats[0].name,
+          href: `/category/${relatedSubCats[0].slug}`,
+          hasDropdown: false
+        };
+      }
+
+      // ✅ Agar 0 subcategories hain (category khud show ho)
+      if (relatedSubCats.length === 0) {
+        return {
+          id: cat.id,
+          label: cat.name,
+          href: `/category/${cat.slug}`,
+          hasDropdown: false
+        };
+      }
+
+      // ✅ Agar multiple subcategories hain (dropdown dikhaao)
       return {
         id: cat.id,
         label: cat.name,
         href: `/category/${cat.slug}`,
-        hasDropdown: relatedSubCats.length > 0,
+        hasDropdown: true,
         items: relatedSubCats.map(sub => ({
           id: sub.id,
           label: sub.name,
