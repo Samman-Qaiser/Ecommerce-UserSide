@@ -107,7 +107,7 @@ const AllCategories = () => {
               <img 
                 src={cat.img} 
                 alt={cat.name} 
-                className="w-full m-auto object-top h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                className="w-full m-auto lg:object-top h-full object-cover group-hover:scale-105 transition-transform object-center duration-700 ease-out"
               />
 
               {/* Overlay Gradient */}

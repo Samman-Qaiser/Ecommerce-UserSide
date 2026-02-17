@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Heart, ShoppingBag, Star, Truck, Shield, RefreshCw, ChevronDown, ShoppingBagIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, ShoppingBag, Star, Truck, Shield, RefreshCw, ChevronDown, ShoppingBagIcon, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -21,7 +21,8 @@ export default function ProductPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
+
   // Dummy product data (Firebase se replace hoga)
   const product = {
     id: id || 1,
@@ -38,6 +39,7 @@ export default function ProductPage() {
       'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=800',
       'https://images.unsplash.com/photo-1606522321798-c51a9b286e0a?w=800',
     ],
+     video:"https://www.pexels.com/download/video/7685041/", // e.g. 'https://example.com/product-video.mp4'
     badge: 'TOP RATED',
     stock: 2,
     inStock: true,
@@ -56,64 +58,77 @@ export default function ProductPage() {
       'Perfect for festive occasions',
     ],
   };
-  const navigate=useNavigate()
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === product.images.length - 1 ? 0 : prev + 1
-    );
+
+  const navigate = useNavigate();
+
+  // Video logic
+  const hasVideo = !!product.video;
+  const totalSlides = hasVideo ? product.images.length + 1 : product.images.length;
+  const isVideoSlide = hasVideo && currentImageIndex === totalSlides - 1;
+
+  const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % totalSlides);
+  const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({ ...product, quantity: 1 }));
+    toast.success(`${product.name} added to cart!`);
   };
 
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? product.images.length - 1 : prev - 1
-    );
+  const handleBuyNow = () => {
+    dispatch(addToCart({ ...product, quantity: 1 }));
+    navigate('/checkout');
   };
-const handleAddToCart = () => {
-  dispatch(addToCart({
-    ...product,
-    quantity: 1
-  }));
-  toast.success(`${product.name} added to cart!`);
-};
 
-
-const handleBuyNow = () => {
-  dispatch(addToCart({
-    ...product,
-    quantity: 1
-  }));
-  // Success message dikhane ki zarurat nahi kyunki redirect ho raha hai
-  navigate('/checkout'); 
-};
   return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8 lg:py-12">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-          
+
           {/* Left: Image Gallery */}
           <div className="space-y-4">
-            {/* Main Image */}
-            <div className="relative aspect-3/4 bg-gray-100 rounded-lg overflow-hidden">
-              <img
-                src={product.images[currentImageIndex]}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
 
-              {/* Badge */}
-              {product.badge && (
+            {/* Main Image / Video */}
+            <div className="relative aspect-3/4 bg-gray-100 rounded-lg overflow-hidden group">
+
+              {isVideoSlide ? (
+                /* VIDEO SLIDE */
+                <>
+                  <video
+                    src={product.video}
+                    className="w-full h-full object-cover"
+                 
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  />
+                  <div className="absolute top-4 left-4 bg-black/70 text-white text-[10px] uppercase tracking-widest px-2 py-1 rounded">
+                    Video
+                  </div>
+                </>
+              ) : (
+                /* IMAGE SLIDE */
+                <img
+                  src={product.images[currentImageIndex]}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
+
+              {/* Badge (only on image slides) */}
+              {product.badge && !isVideoSlide && (
                 <Badge className="absolute top-4 left-4 bg-black text-white px-4 py-2 text-sm">
                   {product.badge}
                 </Badge>
               )}
 
-              {/* Navigation */}
-              {product.images.length > 1 && (
+              {/* Navigation Arrows */}
+              {totalSlides > 1 && (
                 <>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full shadow-lg"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={prevImage}
                   >
                     <ChevronLeft className="h-6 w-6" />
@@ -121,7 +136,7 @@ const handleBuyNow = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full shadow-lg"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={nextImage}
                   >
                     <ChevronRight className="h-6 w-6" />
@@ -131,15 +146,13 @@ const handleBuyNow = () => {
 
               {/* Dots */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {product.images.map((_, idx) => (
+                {Array.from({ length: totalSlides }).map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentImageIndex(idx)}
                     className={cn(
                       "h-2 rounded-full transition-all",
-                      idx === currentImageIndex 
-                        ? "w-8 bg-white" 
-                        : "w-2 bg-white/60"
+                      idx === currentImageIndex ? "w-8 bg-white" : "w-2 bg-white/60"
                     )}
                   />
                 ))}
@@ -148,14 +161,15 @@ const handleBuyNow = () => {
 
             {/* Thumbnail Grid */}
             <div className="grid grid-cols-4 gap-3">
+              {/* Image Thumbnails */}
               {product.images.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentImageIndex(idx)}
                   className={cn(
                     "aspect-square rounded-lg overflow-hidden border-2 transition-all",
-                    idx === currentImageIndex 
-                      ? "border-black" 
+                    idx === currentImageIndex
+                      ? "border-black"
                       : "border-gray-200 opacity-70 hover:opacity-100"
                   )}
                 >
@@ -166,6 +180,33 @@ const handleBuyNow = () => {
                   />
                 </button>
               ))}
+
+              {/* Video Thumbnail (last slot) */}
+              {hasVideo && (
+                <button
+                  onClick={() => setCurrentImageIndex(totalSlides - 1)}
+                  className={cn(
+                    "aspect-square rounded-lg overflow-hidden border-2 transition-all relative",
+                    isVideoSlide
+                      ? "border-black"
+                      : "border-gray-200 opacity-70 hover:opacity-100"
+                  )}
+                >
+                  {/* Video poster frame */}
+                  <video
+                    src={product.video}
+                    className="w-full h-full object-cover"
+                    muted
+                    preload="metadata"
+                  />
+                  {/* Play icon overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <div className="bg-white/90 rounded-full p-1.5">
+                      <Play className="h-4 w-4 fill-black text-black" />
+                    </div>
+                  </div>
+                </button>
+              )}
             </div>
           </div>
 
@@ -247,9 +288,9 @@ const handleBuyNow = () => {
             <Separator className="my-6" />
 
             {/* Action Buttons */}
-            <div className="flex  flex-col lg:flex-row gap-2  mb-8">
-         <AnimatedButton onClick={handleAddToCart}  label='ADD TO CART ' icon={ShoppingBagIcon}  className='font-light w-full'/>
-         <AnimatedButton onClick={handleBuyNow} label='BUY NOW' className='font-light bg-purple-600 w-full'/>
+            <div className="flex flex-col lg:flex-row gap-2 mb-8">
+              <AnimatedButton onClick={handleAddToCart} label='ADD TO CART' icon={ShoppingBagIcon} className='font-light w-full' />
+              <AnimatedButton onClick={handleBuyNow} label='BUY NOW' className='font-light bg-purple-600 w-full' />
             </div>
 
             {/* Features */}
@@ -345,8 +386,6 @@ const handleBuyNow = () => {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-
-         
           </div>
         </div>
       </div>

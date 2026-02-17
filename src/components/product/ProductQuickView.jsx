@@ -18,6 +18,9 @@ export default function ProductQuickView({ product, open, onClose }) {
 
   // Fallback for images array
   const images = product.images || [product.image];
+  const hasVideo = !!product.video;
+  const totalSlides = hasVideo ? images.length + 1 : images.length;
+  const isVideoSlide = hasVideo && currentImageIndex === totalSlides - 1;
 
   const sizes = [
     { label: "XS-S", inStock: true },
@@ -38,10 +41,15 @@ export default function ProductQuickView({ product, open, onClose }) {
     return () => (document.body.style.overflow = "unset");
   }, [open]);
 
+  // Reset slide index when product changes
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [product]);
+
   if (!open || !product) return null;
 
-  const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % totalSlides);
+  const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -71,24 +79,47 @@ export default function ProductQuickView({ product, open, onClose }) {
           <X className="w-5 h-5" />
         </button>
 
-        {/* LEFT: IMAGE CAROUSEL SECTION */}
+        {/* LEFT: IMAGE / VIDEO CAROUSEL SECTION */}
         <div className="relative mt-5 w-full lg:w-1/2 h-[50vh] lg:h-[80vh] bg-[#F9F9F9] group">
           <AnimatePresence mode="wait">
-            <motion.img
-              key={currentImageIndex}
-              src={images[currentImageIndex]}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="w-full h-full object-cover lg:object-contain"
-            />
+            {isVideoSlide ? (
+              /* VIDEO SLIDE */
+              <motion.div
+                key="video-slide"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="w-full h-full"
+              >
+                <video
+                  src={product.video}
+                  className="w-full h-full object-cover lg:object-contain"
+          
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              </motion.div>
+            ) : (
+              /* IMAGE SLIDE */
+              <motion.img
+                key={currentImageIndex}
+                src={images[currentImageIndex]}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="w-full h-full object-cover lg:object-contain"
+              />
+            )}
           </AnimatePresence>
 
           {/* Navigation Arrows */}
-          {images.length > 1 && (
+          {totalSlides > 1 && (
             <>
-              <button onClick={prevImage} className="absolute left-4 top-1/2  -translate-y-1/2 bg-white/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+              <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
@@ -99,13 +130,30 @@ export default function ProductQuickView({ product, open, onClose }) {
 
           {/* Progress Indicators */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
-            {images.map((_, idx) => (
-              <div 
-                key={idx} 
-                className={cn("h-1 transition-all rounded-full", idx === currentImageIndex ? "w-6 bg-black" : "w-2 bg-black/20")} 
-              />
-            ))}
+            {Array.from({ length: totalSlides }).map((_, idx) => {
+              const isVideo = hasVideo && idx === totalSlides - 1;
+              const isActive = idx === currentImageIndex;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentImageIndex(idx)}
+                  className={cn(
+                    "h-1 transition-all rounded-full",
+                    isActive ? "w-6 bg-black" : "w-2 bg-black/20",
+                    // video dot: show a small play icon feel with slightly different style
+                    isVideo && !isActive && "bg-black/40"
+                  )}
+                />
+              );
+            })}
           </div>
+
+          {/* Video Badge on last dot / slide */}
+          {hasVideo && isVideoSlide && (
+            <div className="absolute top-4 left-4 bg-black/70 text-white text-[10px] uppercase tracking-widest px-2 py-1 rounded">
+              Video
+            </div>
+          )}
         </div>
 
         {/* RIGHT: CONTENT SECTION */}
@@ -168,23 +216,19 @@ export default function ProductQuickView({ product, open, onClose }) {
           </div>
 
           {/* Full Width Action Button */}
-          <div className="m-auto flex items-center -translate-y-5 w-full ">
+          <div className="m-auto flex items-center -translate-y-5 w-full">
             <AnimatedButton
               onClick={handleAddToCart}
-               label=" ADD TO CART"
-               className="font-light w-full  "
+              label="ADD TO CART"
+              className="font-light w-full"
             />
-             
-       
-            
-          
           </div>
-            <Link 
-              to={`/product/${product.id}`}
-              className="block w-full  py-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 hover:text-black transition-colors"
-            >
-              View Full Product Details <ChevronRight className="inline w-3 h-3 ml-1" />
-            </Link>
+          <Link 
+            to={`/product/${product.id}`}
+            className="block w-full py-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 hover:text-black transition-colors"
+          >
+            View Full Product Details <ChevronRight className="inline w-3 h-3 ml-1" />
+          </Link>
         </div>
       </motion.div>
     </div>

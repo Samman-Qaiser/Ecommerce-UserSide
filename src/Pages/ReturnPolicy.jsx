@@ -17,7 +17,7 @@ const ReturnPolicy = () => {
           {/* Return Policy Section */}
           <section>
             <h2 className="text-xl font-bold text-black mb-4 flex items-center">
-              <span className="w-8 h-[2px] bg-[#A07B50] mr-3"></span>
+              <span className="w-8 h-0.5 bg-[#A07B50] mr-3"></span>
               DOMESTIC RETURNS
             </h2>
             <div className="space-y-4">
@@ -33,7 +33,7 @@ const ReturnPolicy = () => {
           {/* Exchange Policy Section */}
           <section>
             <h2 className="text-xl font-bold text-black mb-4 flex items-center">
-              <span className="w-8 h-[2px] bg-[#A07B50] mr-3"></span>
+              <span className="w-8 h-0.5 bg-[#A07B50] mr-3"></span>
               EXCHANGE POLICY
             </h2>
             <div className="space-y-4">
@@ -49,7 +49,7 @@ const ReturnPolicy = () => {
           {/* Refund Policy Section */}
           <section>
             <h2 className="text-xl font-bold text-black mb-4 flex items-center">
-              <span className="w-8 h-[2px] bg-[#A07B50] mr-3"></span>
+              <span className="w-8 h-0.5 bg-[#A07B50] mr-3"></span>
               REFUND PROCESS
             </h2>
             <div className="space-y-4">
@@ -57,7 +57,7 @@ const ReturnPolicy = () => {
               <div className="bg-gray-50 p-5 border-l-2 border-[#A07B50]">
                 <p className="text-sm font-medium text-black">Timeline: 2-3 working days after pickup.</p>
                 <p className="text-sm mt-2">
-                  <strong className="text-black">Damaged Products:</strong> Must be reported within <span className="text-black">48 hours</span> of delivery with photos/videos sent to <span className="text-[#A07B50]">returns@dototaagabykriti.com</span>.
+                  <strong className="text-black">Damaged Products:</strong> Must be reported within <span className="text-black">48 hours</span> of delivery with photos/videos sent to <span className="text-[#A07B50]">dototaagakriti1@gmail.com</span>.
                 </p>
               </div>
             </div>

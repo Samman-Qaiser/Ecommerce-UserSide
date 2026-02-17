@@ -212,3 +212,7 @@
     opacity: 0.5;
   }
 }
+
+body {
+  font-family: "Jost", sans-serif;
+}

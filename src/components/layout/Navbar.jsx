@@ -108,7 +108,7 @@ export default function Navbar() {
                     </DropdownMenuTrigger>
                     
                     {isClickable && (
-                      <DropdownMenuContent align="start" className="min-w-[200px] max-h-[400px] overflow-y-auto">
+                      <DropdownMenuContent align="start" className="min-w-50 max-h-100 overflow-y-auto">
                         {item.items?.map((subItem) => (
                           <DropdownMenuItem key={subItem.id} asChild>
                             <Link 
@@ -236,7 +236,10 @@ function MobileMenu({ onClose }) {
   return (
     <div className="flex flex-col h-full bg-white">
       <div className="flex items-center justify-between p-6 border-b">
-        <img src="./logo.jpeg" className="w-24 h-auto" alt="Logo" />
+      <Link to='/'>
+                <img src="/logo.jpeg" className="w-24 h-auto" alt="Logo" />
+      </Link>
+
       </div>
 
       <nav className="flex-1 overflow-y-auto p-6">

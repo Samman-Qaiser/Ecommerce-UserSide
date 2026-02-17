@@ -225,6 +225,7 @@ export const sampleProducts = [
     color: "light-pink",
     fabric: "cotton-acrylic",
     occasion: "office",
+    video:"https://www.pexels.com/download/video/9945196/"
   },
   {
     id: 14,

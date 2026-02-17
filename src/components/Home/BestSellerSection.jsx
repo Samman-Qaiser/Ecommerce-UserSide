@@ -17,7 +17,8 @@ const dummyProducts = [
     badge: 'NEW', 
     rating: 4.9, 
     reviews: 456, 
-    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500' 
+    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500' ,
+      video:"https://www.pexels.com/download/video/7685041/"
   },
   { 
     id: 'dummy-2', 
@@ -83,7 +84,7 @@ export default function BestSellerSection() {
   if (isLoading) {
     return (
       <section className="py-4 mt-0 lg:mt-7 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
+        <div className="max-w-7xl mx-auto flex items-center justify-center min-h-100">
           <Loader2 className="w-8 h-8 animate-spin text-[#A07B50]" />
         </div>
       </section>
@@ -94,7 +95,7 @@ export default function BestSellerSection() {
   if (isError || !bestSellerCategories?.length) {
     return (
       <section className="py-4 mt-0 lg:mt-7 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
+        <div className="max-w-7xl mx-auto flex items-center justify-center min-h-100">
           <p className="text-slate-500">Unable to load bestsellers at this time.</p>
         </div>
       </section>
@@ -158,7 +159,7 @@ export default function BestSellerSection() {
         </div>
 
         {/* --- Animated Product Grid --- */}
-        <div className="min-h-[400px]">
+        <div className="min-h-100">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

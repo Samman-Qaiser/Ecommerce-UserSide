@@ -5,14 +5,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const bannersLandscape = [
   "./web-banner01.jpg",
   "./web-banner02.jpg",
-  "/web-banner03.jpg",
+  "./web-banner03 (1).jpg",
 ];
 
 // Portrait images for XS / mobile
 const bannersPortrait = [
   "/chanderi.jfif",
   "/Work-Sarees.jpg",
-  "/Banarasi Saree.jfif",
+  "/mobilebanner3.png",
 ];
 
 const HeroSlider = () => {

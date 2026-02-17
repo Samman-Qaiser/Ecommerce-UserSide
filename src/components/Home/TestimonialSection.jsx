@@ -1,83 +1,134 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import { motion } from 'framer-motion';
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, EffectFade } from "swiper/modules";
+import { motion } from "framer-motion";
+import { Quote } from "lucide-react";
 
 // Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { User2 } from 'lucide-react';
+import "swiper/css";
+import "swiper/css/pagination";
 
 const testimonials = [
-  { id: 1, name: "Ananya Sharma", role: "Bride", content: "The Banarasi silk quality is unmatched. It felt like wearing a piece of art.", image: "", rating: 5 },
-  { id: 2, name: "Priya Patel", role: "Blogger", content: "Minimalist design and premium fabric. The drape of their organza is just perfect.", image: "", rating: 5 },
-  { id: 3, name: "Sneha Reddy", role: "Customer", content: "Fast delivery and the colors are exactly as shown in the pictures. Highly recommended!", image: "https://i.pravatar.cc/150?u=3", rating: 4 },
-  { id: 4, name: "Meera Das", role: "Verified Buyer", content: "I bought a Kanjeevaram for my mom, and she absolutely loved the zari work.", image: "", rating: 5 },
+  {
+    id: 1,
+    name: "Ananya Sharma",
+    role: "Elite Bride",
+    content:
+      "The Banarasi silk quality is unmatched. It felt like wearing a piece of heritage art tailored for the modern woman.",
+    rating: 5,
+  },
+  {
+    id: 2,
+    name: "Priya Patel",
+    role: "Fashion Curator",
+    content:
+      "Minimalist design and premium fabric. The drape of their organza is fluid, ethereal, and simply perfect.",
+    rating: 5,
+  },
+  {
+    id: 3,
+    name: "Sneha Reddy",
+    role: "Regular Patron",
+    content:
+      "The attention to detail in the zari work is breathtaking. Truly a luxury experience from order to delivery.",
+    rating: 5,
+  },
+  {
+    id: 4,
+    name: "Meera Das",
+    role: "Verified Connoisseur",
+    content:
+      "I bought a Kanjeevaram for my mother. The craftsmanship speaks volumes of the brand's commitment to excellence.",
+    rating: 5,
+  },
 ];
 
 const TestimonialSection = () => {
   return (
-    <section className="py-20 bg-[#faf9f6]">
-      <div className="max-w-7xl mx-auto px-6">
-        
-        {/* Header Section - Centered */}
-        <div className="flex flex-col items-center justify-center text-center mb-16">
-          <motion.span 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-sm uppercase tracking-[0.3em] text-gray-500 font-semibold mb-3"
+    <section className="relative py-24 bg-[#FCFBF9] overflow-hidden">
+      {/* Decorative Background Element */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-40 pointer-events-none">
+        <div className="absolute top-[-10%] right-[-10%] w-125 h-125 bg-amber-100/50 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-125 h-125 bg-slate-200/50 blur-[120px] rounded-full" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Header Section */}
+        <div className="flex flex-col items-center justify-center text-center mb-20">
+          <motion.span
+            initial={{ opacity: 0, letterSpacing: "0.1em" }}
+            whileInView={{ opacity: 1, letterSpacing: "0.4em" }}
+            transition={{ duration: 1 }}
+            className="text-[10px] md:text-xs uppercase text-[#A07B50] font-medium mb-4"
           >
-            Voices of Elegance
+            The Testimonial Archive
           </motion.span>
-          
-          <h2 className="text-4xl md:text-5xl  text-slate-800 max-w-2xl leading-tight">
-            What Our Patrons Say
+
+          <h2 className="text-4xl md:text-6xl font-serif text-slate-900 leading-tight">
+            Voices of <span className="italic">Elegance</span>
           </h2>
-          
-          <div className="w-24 h-1 bg-gray-500 mt-6 rounded-full opacity-30"></div>
+
+          <div className="w-12 h-px bg-amber-800/30 mt-8"></div>
         </div>
 
         {/* Slider Section */}
         <Swiper
-          modules={[Autoplay, Pagination, Navigation]}
-          spaceBetween={30}
+          modules={[Autoplay, Pagination]}
+          spaceBetween={40}
           slidesPerView={1}
           loop={true}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
-          pagination={{ clickable: true, dynamicBullets: true }}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
+          pagination={{ clickable: true }}
           breakpoints={{
-            640: { slidesPerView: 2 },
+            768: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
           }}
-          className="pb-16"
+          className="pb-20 px-4!"
         >
           {testimonials.map((item) => (
             <SwiperSlide key={item.id} className="h-auto">
-              <motion.div 
-                whileHover={{ y: -8 }}
-                className="bg-white p-8 rounded-[2rem] shadow-[0_15px_40px_-20px_rgba(0,0,0,0.08)] border border-gray-100 h-full flex flex-col"
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="group relative bg-white/60 backdrop-blur-md p-10 rounded-2xl border border-white/80 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.05)] transition-all duration-500 h-full flex flex-col justify-between"
               >
-                <div className="text-5xl text-gray-500 opacity-20  leading-none mb-2">“</div>
-                
-                <p className="text-gray-600 leading-relaxed flex-grow italic mb-8 px-2">
-                  {item.content}
-                </p>
+                {/* Accent Icon */}
+                <div className="absolute top-8 right-10">
+                  <Quote
+                    size={32}
+                    className="text-[#A07B50]/10 group-hover:text-[#A07B50]/20 transition-colors duration-500"
+                  />
+                </div>
 
-                <div className="flex items-center gap-4 pt-6 border-t border-gray-50">
-                {item.image ? ( <img 
-                    src={item.image} 
-                    alt={item.name} 
-                    className="w-14 h-14 rounded-full object-cover ring-4 ring-[#faf9f6]"
-                  />) :(<User2 className='w-14 h-14 rounded-full object-cover ring-1 font-extralight ring-gray-400' />)}
-                 
-                  <div>
-                    <h4 className="font-bold text-slate-900 leading-tight">{item.name}</h4>
-                    <p className="text-gray-400 text-[11px] uppercase tracking-wider mt-1">{item.role}</p>
-                    <div className="flex text-yellow-500 text-[10px] mt-1">
-                      {"★".repeat(item.rating)}
-                    </div>
+                <div className="relative">
+                  <div className="flex gap-1 mb-6">
+                    {[...Array(item.rating)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-1 h-1 rounded-full bg-amber-600"
+                      ></div>
+                    ))}
+                  </div>
+
+                  <p className="text-slate-700 text-lg leading-relaxed font-light mb-10 italic">
+                    "{item.content}"
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-5 pt-8 border-t border-slate-100">
+                  <div className="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center text-white font-serif text-sm tracking-widest overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
+                    {item.name.charAt(0)}
+                    <div className="absolute inset-0 bg-amber-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <h4 className="font-serif text-lg text-slate-900 tracking-wide">
+                      {item.name}
+                    </h4>
+                    <p className="text-amber-800/60 text-[10px] uppercase tracking-[0.2em] font-medium">
+                      {item.role}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -86,17 +137,21 @@ const TestimonialSection = () => {
         </Swiper>
       </div>
 
-      {/* Modern Gold Theme Overrides */}
       <style jsx global>{`
         .swiper-pagination-bullet {
-          background: #d1d1d1;
+          background: #e2e8f0;
           opacity: 1;
+          width: 6px;
+          height: 6px;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .swiper-pagination-bullet-active {
-          background: gray !important;
-          width: 25px !important;
-          border-radius: 5px !important;
-          transition: all 0.3s ease;
+          background: #b45309 !important;
+          width: 30px !important;
+          border-radius: 10px !important;
+        }
+        .swiper-container {
+          overflow: visible !important;
         }
       `}</style>
     </section>
