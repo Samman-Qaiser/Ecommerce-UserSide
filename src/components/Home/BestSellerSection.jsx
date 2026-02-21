@@ -103,12 +103,12 @@ export default function BestSellerSection() {
   }
 
   return (
-    <section className="py-4 mt-0 lg:mt-7 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
+    <section className="py-4 w-full lg:w-[90vw] lg:m-auto mt-0 lg:mt-7 px-4 sm:px-6 lg:px-8  overflow-hidden">
       <div className="max-w-7xl mx-auto">
         
         {/* --- Header & Tab Navigation --- */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
-          <div className="max-w-xl">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-2">
+          <div className="lg:w-[70%] w-full self-center lg:self-start relative text-center  flex flex-col  items-center lg:items-start ">
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -125,21 +125,22 @@ export default function BestSellerSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900"
+              className="text-2xl lg:ml-10 mr-1  bg-white z-99  md:text-5xl  tracking-[4px] text-slate-900"
             >
-              Our Bestsellers.
+              Bestsellers Sarees
             </motion.h2>
+            <span className='absolute lg:inline hidden z-1 top-[75%] w-full h-0.5 bg-gray-400'></span>
           </div>
 
           {/* --- Tabs --- */}
           {tabs.length > 0 && (
-            <div className="flex items-center p-1.5 bg-slate-100/80 backdrop-blur-sm border border-slate-200/50 w-fit">
+            <div className="flex items-center  lg:self-end self-center justify-center bg-slate-100/80 p-1.5  backdrop-blur-sm border border-slate-200/50 w-fit">
               {tabs.map((tab, index) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(index)}
                   className={`relative px-6 py-2.5 text-sm transition-all duration-300 ${
-                    activeTab === index ? 'text-black' : 'text-slate-900 hover:text-slate-900'
+                    activeTab === index ? 'text-black bg-[#F5E6D3]' : 'text-slate-900 hover:text-slate-900'
                   }`}
                 >
                   {activeTab === index && (
@@ -167,7 +168,7 @@ export default function BestSellerSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 lg:w-[90%] m-auto"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 lg:w-full m-auto"
             >
               {currentProducts.length > 0 ? (
                 currentProducts.map((product, index) => (

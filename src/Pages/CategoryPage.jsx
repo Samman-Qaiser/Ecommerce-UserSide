@@ -337,18 +337,16 @@ const CategoryPage = () => {
 
 const {
   data: productsData,
-  isLoading: productsLoading,
+  isLoading,
+  isFetching,
   error: productsError,
 } = useProductsBySubCategory(subCategory?.id, {
   pageSize: 100,
   inStock: null,
   sortBy: "createdAt",
   sortOrder: "desc",
-}, {
-  enabled: !!subCategory?.id,  // ✅ Only fetch when subcategory loaded
-  staleTime: 5 * 60 * 1000,    // ✅ Cache for 5 mins
-  gcTime: 10 * 60 * 1000,
 });
+
 
   // State
   const [sortBy, setSortBy] = useState("featured");
@@ -678,7 +676,7 @@ const {
 
           {/* Products Grid */}
           <div className="flex-1">
-           {productsLoading ? (
+           {isLoading && !productsData ? (
     // ✅ Skeleton while loading
     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
       {[...Array(12)].map((_, i) => (
@@ -690,7 +688,8 @@ const {
       ))}
     </div>
   ):
-            currentProducts.length === 0 ? (
+          !isLoading && currentProducts.length === 0
+? (
               <div className="text-center py-20">
                 <p className="text-lg text-muted-foreground">
                   No products found matching your filters
@@ -705,6 +704,11 @@ const {
               </div>
             ) : (
               <>
+               {isFetching && (
+      <p className="text-xs text-muted-foreground mb-2">
+        Updating products...
+      </p>
+    )}
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                   {currentProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />

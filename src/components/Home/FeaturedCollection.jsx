@@ -201,26 +201,27 @@ const FeaturedCollection = () => {
   };
 
   return (
-    <section className="pb-5 mt-10 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-gray-50 via-white to-gray-100">
+    <section className="pb-5 lg:w-[90vw] lg:m-auto  mt-10 px-4 sm:px-6 lg:px-8 ">
       <div className="max-w-7xl mb-5 mt-10 mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+        <div className=" mb-10 sm:mb-12 lg:mb-16 relative  flex flex-col items-center lg:items-start">
           <div className="inline-flex items-center gap-2 bg-[#F5E6D3] px-4 py-2 rounded-full mb-4">
             <Sparkles className="w-4 h-4 text-[#A07B50]" />
             <span className="text-sm font-semibold text-[#A07B50]">
               Curated Just For You
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
-            Featured Collections
+          <h2 className="text-3xl ml-5 bg-white sm:text-4xl lg:text-5xl tracking-wide text-gray-900 mb-3 sm:mb-4">
+            Featured Categories
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl text-center lg:text-left ">
             Explore our handpicked collections designed to elevate your style
           </p>
+             <span className='absolute lg:inline hidden -left-2 -z-1 top-[55%] w-full h-0.5 bg-gray-400'></span>
         </div>
 
         {/* Bento Grid - 2 Rows Only */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {reorderedCollections.map((collection, index) => {
             const Icon = collection.icon;
             const isClickable = !collection.isPlaceholder;

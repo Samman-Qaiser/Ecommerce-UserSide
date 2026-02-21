@@ -8,7 +8,7 @@ import CartSidebar from "../CartSidebar";
 export const SideNavigation = () => (
   <nav>
     {/* Large screens - vertical side nav */}
-    <div className="hidden md:flex shadow-md fixed left-0 top-1/3 flex-col gap-4 z-50 bg-white p-3">
+    <div className="hidden md:flex shadow-md fixed left-0 top-1/7 flex-col gap-4 z-70 bg-white p-3">
       <Link to="/"><IoHomeOutline className="font-light font-extralight" size={24} /></Link>
       <Link to="/allcategories"><TbCategory size={24} /></Link>
       <CartSidebar>

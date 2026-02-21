@@ -8,7 +8,7 @@ const ImageTextSection = () => {
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   return (
-    <div className="w-full bg-[#FCF9F5] py-20 lg:py-32 overflow-hidden relative">
+    <div className="w-full lg:w-[90vw] lg:m-auto bg-[#FCF9F5] py-20 lg:py-32 overflow-hidden relative">
       {/* Background Decorative Element */}
       <motion.div 
         style={{ y: y1 }}
@@ -60,7 +60,7 @@ const ImageTextSection = () => {
         </motion.div>
 
         {/* Left: Enhanced Arch Image Section */}
-        <div className="relative w-full lg:w-1/2 group">
+        <div className="relative w-full  lg:w-[40%] group">
           
           {/* Decorative Floating Card */}
           <motion.div 

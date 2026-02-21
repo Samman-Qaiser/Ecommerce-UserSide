@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from "../redux/cartSlice";
 import { toast } from "sonner";
 import AnimatedButton from '../components/ui/AnimmatedButton';
+import RelatedProducts from '../components/product/RelatedProducts';
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -80,6 +81,7 @@ export default function ProductPage() {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8 lg:py-12">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
@@ -314,7 +316,7 @@ export default function ProductPage() {
               <AccordionItem value="details">
                 <AccordionTrigger className="text-base font-semibold">
                   DETAILS
-                  <ChevronDown className="h-5 w-5" />
+               
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-3 text-sm">
@@ -390,5 +392,7 @@ export default function ProductPage() {
         </div>
       </div>
     </div>
+    <RelatedProducts />
+    </>
   );
 }

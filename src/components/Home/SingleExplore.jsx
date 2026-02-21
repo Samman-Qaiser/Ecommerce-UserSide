@@ -15,7 +15,7 @@ const SingleExplore = () => {
   const yFast = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
   return (
-    <section className="w-full min-h-screen bg-[#F9F6F2] flex flex-col lg:flex-row items-center overflow-hidden">
+    <section className="w-full lg:w-[90vw] lg:m-auto min-h-screen bg-[#F9F6F2] flex flex-col lg:flex-row items-center overflow-hidden">
       
       {/* LEFT CONTENT: Text Area */}
       <motion.div 
@@ -23,7 +23,7 @@ const SingleExplore = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
-        className="w-full lg:w-2/5 p-8 lg:p-24 flex flex-col justify-center items-center lg:items-start text-center lg:text-left order-2 lg:order-1 relative z-20"
+        className="w-full lg:w-2/5 p-8 lg:p-10 flex flex-col justify-center items-center lg:items-start text-center lg:text-left order-2 lg:order-1 relative z-20"
       >
         <motion.span 
           className="text-[#A07B50] text-xs uppercase tracking-[0.4em] mb-4 font-semibold block"

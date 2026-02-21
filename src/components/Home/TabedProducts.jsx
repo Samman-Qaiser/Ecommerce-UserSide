@@ -214,34 +214,38 @@ const TabbedProducts = () => {
   const activeTabInfo = tabs.find(tab => tab.id === activeTab);
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-white via-purple-50/30 to-pink-50/30">
+    <section className="py-12 lg:w-[90vw] lg:m-auto sm:py-4 lg:py-5 px-4 sm:px-6 lg:px-8 ">
       <div className="max-w-7xl mx-auto">
 
         {/* Section Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <div className="inline-flex items-center gap-2 bg-[#F5E6D3] px-4 py-2 rounded-full mb-4">
+        <div className="flex  flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
+        <div className='relative  lg:w-[70%] w-full   lg:self-start flex flex-col items-center lg:items-start  text-center'>
+           <div className="inline-flex items-center gap-2 bg-[#F5E6D3] px-4 py-2 rounded-full mb-4">
             <Sparkles className="w-4 h-4 text-[#A07B50]" />
             <span className="text-sm font-semibold text-[#A07B50]">Curated Collections</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
+          <h2 className="text-3xl ml-0 lg:ml-5 w-fit px-2 bg-white z-10 sm:text-4xl lg:text-5xl tracking-wide text-gray-900 mb-3 sm:mb-4">
             Shop by Category
           </h2>
 
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl ">
             Explore our exclusive range of festive and ready-to-wear collections
           </p>
+          <span className='absolute lg:inline hidden -left-2 -z-1 top-[55%] w-full h-0.5 bg-gray-400'></span>
         </div>
+         
+       
 
         {/* Tabs Navigation */}
-        <div className="mb-8 sm:mb-12">
-         <div className="lg:flex hidden m-auto items-center p-1.5 bg-slate-100/80  backdrop-blur-sm border border-slate-200/50 w-fit">
+        <div className="mb-8 sm:mb-12 ">
+         <div className="lg:flex hidden m-auto items-center bg-slate-100/80 p-1.5   backdrop-blur-sm border border-slate-200/50 w-fit">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative px-6 py-2.5 text-sm lg:text-lg transition-all duration-300 ${
-                  activeTab === tab.id ? 'text-black' : 'text-slate-900 hover:text-slate-900'
+                className={`relative  lg:px-6  py-2.5 text-sm lg:text-lg transition-all duration-300 ${
+                  activeTab === tab.id ? 'text-black bg-[#F5E6D3]' : 'text-slate-900 hover:text-slate-900'
                 }`}
               >
                 {activeTab === tab.id && (
@@ -258,12 +262,12 @@ const TabbedProducts = () => {
 
           {/* Mobile Tabs */}
           <div className="sm:hidden overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
-            <div className="flex gap-3 min-w-max">
+            <div className="flex justify-center gap-3 min-w-max">
               {tabs.map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`group relative px-6 py-2 border border-gray-500 border-dotted font-semibold text-base transition-all duration-300 transform hover:scale-105
+                  className={`group relative px-3 py-2 border border-gray-500 border-dotted font-semibold text-base transition-all duration-300 transform hover:scale-105
                     ${activeTab === tab.id ? 'bg-[#F5E6D3] border border-dotted border-black' : 'bg-white text-gray-700 hover:bg-gray-50'}
                   `}
                 >
@@ -273,9 +277,9 @@ const TabbedProducts = () => {
             </div>
           </div>
         </div>
-
+    </div>
         {/* Products Grid */}
-        <div className="relative w-full lg:w-[90%] m-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="relative w-full  m-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {currentProducts.map((product, index) => (
             <div
               key={product.id}

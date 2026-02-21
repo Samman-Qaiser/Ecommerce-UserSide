@@ -91,18 +91,34 @@ export const useSubCategory = (id) => {
 
 // ✅ GET SUBCATEGORY BY SLUG (Fixed)
 export const useSubCategoryBySlug = (slug) => {
+  const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: QUERY_KEYS.bySlug(slug),
     queryFn: () => subCategoryService.getBySlug(slug),
-   enabled: !!slug,
-   
-    staleTime: Infinity,        // ✅ Data kabhi stale nahi hoga
-    gcTime: 30 * 60 * 1000,     // ✅ 30 min tak cache mein rahega
-    refetchOnMount: false,      // ✅ Mount par refetch nahi
-    refetchOnWindowFocus: false, // ✅ Tab switch par refetch nahi
+    enabled: !!slug,
 
+    staleTime: 10 * 60 * 1000,
+
+    // 🔥 THIS MAKES PAGE INSTANT
+    initialData: () => {
+      // Get all subcategory caches
+      const queries = queryClient.getQueriesData({
+        queryKey: QUERY_KEYS.all,
+      });
+
+      for (const [, data] of queries) {
+        if (Array.isArray(data)) {
+          const found = data.find((sub) => sub.slug === slug);
+          if (found) return found;
+        }
+      }
+
+      return undefined;
+    },
   });
 };
+
 
 // ✅ GET SUBCATEGORY BY NAME
 export const useSubCategoryByName = (name) => {
